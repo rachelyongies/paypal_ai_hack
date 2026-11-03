@@ -40,23 +40,27 @@ export default function ActivityGrid({ rows }: { rows: PaymentRequest[] }) {
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => {
-              setTab(t.id);
-              setTimeout(() => grid.current?.api.onFilterChanged(), 0);
-            }}
-            className={`rounded-full px-3.5 py-1.5 text-sm font-semibold ${tab === t.id ? 'bg-black text-white' : 'bg-pp-surface text-black hover:bg-pp-surface2'}`}
-          >
-            {t.label}
-            {t.id !== 'all' ? <span className="ml-1.5 opacity-60">{rows.filter((r) => (t.id === 'refunded' ? r.status.includes('refund') : r.status === t.id)).length}</span> : null}
-          </button>
-        ))}
-        <input className="input ml-auto h-10 max-w-xs py-0" placeholder="Search merchant, item, reason…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search activity" />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <div className="inline-flex flex-wrap rounded-full bg-fill p-1" role="tablist" aria-label="Filter activity">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              role="tab"
+              aria-selected={tab === t.id}
+              onClick={() => {
+                setTab(t.id);
+                setTimeout(() => grid.current?.api.onFilterChanged(), 0);
+              }}
+              className={`h-9 rounded-full px-4 text-sm font-semibold transition ${tab === t.id ? 'bg-white text-ink shadow-card' : 'text-ink-muted hover:text-ink'}`}
+            >
+              {t.label}
+              {t.id !== 'all' ? <span className="ml-1.5 text-ink-soft">{rows.filter((r) => (t.id === 'refunded' ? r.status.includes('refund') : r.status === t.id)).length}</span> : null}
+            </button>
+          ))}
+        </div>
+        <input className="input ml-auto h-11 max-w-xs rounded-full py-0 pl-5" placeholder="Search merchant, item, reason…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search activity" />
       </div>
-      <div style={{ height: 620 }}>
+      <div className="overflow-hidden rounded-card shadow-card" style={{ height: 640 }}>
         <AgGridReact<PaymentRequest>
           ref={grid}
           theme={valetTheme}

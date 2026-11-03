@@ -16,7 +16,7 @@ export function DetailPanel({ r, owner = false }: { r: PaymentRequest; owner?: b
   const canRefund = owner && (r.status === 'paid' || r.status === 'partially_refunded') && r.paypal?.captureId;
 
   return (
-    <div className="grid gap-6 whitespace-normal bg-pp-surface/60 p-6 leading-normal lg:grid-cols-3">
+    <div className="grid gap-6 whitespace-normal bg-[#FAFAFB] p-6 leading-normal lg:grid-cols-3">
       <div>
         <p className="eyebrow">What the agent asked</p>
         <p className="mt-2 text-sm">
@@ -47,7 +47,7 @@ export function DetailPanel({ r, owner = false }: { r: PaymentRequest; owner?: b
           <ChecksList r={r} />
         </div>
         {r.guardian ? (
-          <div className="mt-4 rounded-tile bg-white p-4">
+          <div className="mt-4 rounded-tile bg-white p-4 shadow-card">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold">AI guardian ({r.guardian.mode === 'claude' ? r.guardian.model ?? 'Claude' : 'rules'})</p>
               <Pill tone={r.guardian.verdict === 'block' ? 'no' : r.guardian.verdict === 'escalate' ? 'ask' : 'ok'}>{r.guardian.verdict}</Pill>

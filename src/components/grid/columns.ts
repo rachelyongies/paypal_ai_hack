@@ -4,6 +4,9 @@ import type { ColDef, ValueGetterParams } from 'ag-grid-community';
 import type { PaymentRequest } from '@/lib/types';
 import { AmountCell, MerchantCell, RiskCell, SignalsCell, SourceCell, StatusCell, VerdictCell } from './renderers';
 
+const CENTER = { display: 'flex', alignItems: 'center' };
+const END = { display: 'flex', alignItems: 'center', justifyContent: 'flex-end' };
+
 const time = (p: { value?: string }) => (p.value ? new Date(p.value).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '');
 
 export function requestColumns(opts: { ops?: boolean } = {}): ColDef<PaymentRequest>[] {
@@ -16,6 +19,7 @@ export function requestColumns(opts: { ops?: boolean } = {}): ColDef<PaymentRequ
       headerName: 'Merchant',
       valueGetter: (p: ValueGetterParams<PaymentRequest>) => p.data?.merchant.name,
       cellRenderer: MerchantCell,
+      cellStyle: CENTER,
       filter: 'agSetColumnFilter',
       enableRowGroup: true,
       minWidth: 190,
@@ -29,25 +33,29 @@ export function requestColumns(opts: { ops?: boolean } = {}): ColDef<PaymentRequ
       flex: 1,
       tooltipValueGetter: (p) => p.value,
     },
-    { field: 'amount', headerName: 'Amount', cellRenderer: AmountCell, filter: 'agNumberColumnFilter', aggFunc: 'sum', enableValue: true, type: 'rightAligned', minWidth: 110 },
-    { field: 'verdict', headerName: 'Decision', cellRenderer: VerdictCell, filter: 'agSetColumnFilter', enableRowGroup: true, enableCellChangeFlash: true, minWidth: 120 },
-    { field: 'status', headerName: 'Status', cellRenderer: StatusCell, filter: 'agSetColumnFilter', enableRowGroup: true, enableCellChangeFlash: true, minWidth: 130 },
+    { field: 'amount', headerName: 'Amount', cellRenderer: AmountCell, cellStyle: END, filter: 'agNumberColumnFilter', aggFunc: 'sum', enableValue: true, type: 'rightAligned', minWidth: 110 },
+    { field: 'verdict', headerName: 'Decision', cellRenderer: VerdictCell, cellStyle: CENTER, filter: 'agSetColumnFilter', enableRowGroup: true, enableCellChangeFlash: true, minWidth: 120, hide: !opts.ops },
+    { field: 'status', headerName: 'Status', cellRenderer: StatusCell, cellStyle: CENTER, filter: 'agSetColumnFilter', enableRowGroup: true, enableCellChangeFlash: true, minWidth: 130 },
     {
       colId: 'riskScore',
       headerName: 'Risk',
       valueGetter: (p: ValueGetterParams<PaymentRequest>) => p.data?.guardian?.riskScore ?? 0,
       cellRenderer: RiskCell,
+      cellStyle: CENTER,
       filter: 'agNumberColumnFilter',
       aggFunc: 'max',
       minWidth: 120,
+      hide: !opts.ops,
     },
     {
       colId: 'signals',
       headerName: 'Signals',
       valueGetter: (p: ValueGetterParams<PaymentRequest>) => (p.data?.guardian?.signals ?? []).join(' '),
       cellRenderer: SignalsCell,
+      cellStyle: CENTER,
       filter: 'agTextColumnFilter',
       minWidth: 200,
+      hide: !opts.ops,
     },
     {
       colId: 'guardianMode',
@@ -60,7 +68,7 @@ export function requestColumns(opts: { ops?: boolean } = {}): ColDef<PaymentRequ
     },
     { field: 'decisionMs', headerName: 'Decision ms', filter: 'agNumberColumnFilter', aggFunc: 'avg', type: 'rightAligned', minWidth: 120, hide: !opts.ops, valueFormatter: (p) => (p.value == null ? '' : Math.round(Number(p.value)).toLocaleString()) },
     { field: 'reason', headerName: 'Why', filter: 'agTextColumnFilter', minWidth: 260, flex: 1.4, tooltipField: 'reason' },
-    { colId: 'orderId', headerName: 'PayPal order', valueGetter: (p: ValueGetterParams<PaymentRequest>) => p.data?.paypal?.orderId ?? '', minWidth: 170, cellClass: 'font-mono text-[11.5px]' },
+    { colId: 'orderId', headerName: 'PayPal order', valueGetter: (p: ValueGetterParams<PaymentRequest>) => p.data?.paypal?.orderId ?? '', minWidth: 170, cellClass: 'font-mono text-[11.5px]', hide: !opts.ops },
   ];
   return cols;
 }

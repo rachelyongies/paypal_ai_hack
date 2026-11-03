@@ -6,7 +6,7 @@ import { Radio } from 'lucide-react';
 import { Shell } from '@/components/Shell';
 import { api } from '@/components/session';
 import { clock, money } from '@/components/format';
-import { Pill, Spinner, Stat } from '@/components/ui';
+import { PageHeader, Pill, Spinner, Stat } from '@/components/ui';
 import type { OpsRequest } from '@/components/client-types';
 import type { PaymentRequest } from '@/lib/types';
 
@@ -62,22 +62,22 @@ function Ops() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="eyebrow">PayPal internal view</p>
-          <h1 className="text-[32px] font-bold tracking-[-0.03em]">Risk Ops</h1>
-          <p className="max-w-2xl text-ink-muted">What PayPal&apos;s risk team would see: every agent-initiated payment across all Valet owners, the decision, and the reason. Labelled agent-fraud data that no one has today.</p>
-        </div>
-        <Pill tone={live ? 'ok' : 'muted'}>
-          <Radio className={`h-3.5 w-3.5 ${live ? 'animate-pulseDot' : ''}`} /> {live ? 'Live' : 'Connecting'}
-        </Pill>
-      </div>
+      <PageHeader
+        kicker="For PayPal · internal view"
+        title="Risk Ops"
+        sub="What PayPal's risk team would see: every agent payment across all Valet owners, the decision and the reason. Labelled agent fraud data that nobody has today."
+        actions={
+          <Pill tone={live ? 'ok' : 'muted'}>
+            <Radio className={`h-3.5 w-3.5 ${live ? 'animate-pulseDot' : ''}`} /> {live ? 'Live' : 'Connecting'}
+          </Pill>
+        }
+      />
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <Stat label="Agent TPV" value={money(kpi.tpv)} sub="net of refunds" />
+        <Stat label="Agent TPV" tone="blue" value={money(kpi.tpv)} sub="net of refunds" />
         <Stat label="Requests" value={String(kpi.count)} />
         <Stat label="Auto-approved" value={`${kpi.auto}%`} sub="of paid purchases" />
-        <Stat label="Blocked value" value={money(kpi.blockedValue)} sub={`${kpi.blocked} requests`} />
-        <Stat label="Injections caught" value={String(kpi.injections)} />
+        <Stat label="Blocked value" tone="no" value={money(kpi.blockedValue)} sub={`${kpi.blocked} requests`} />
+        <Stat label="Injections caught" tone="no" value={String(kpi.injections)} />
         <Stat label="Median decision" value={kpi.median < 1000 ? `${kpi.median} ms` : `${(kpi.median / 1000).toFixed(1)} s`} />
       </div>
       {rows ? <OpsGrid rows={rows as unknown as PaymentRequest[]} /> : <div className="flex items-center gap-2 text-ink-muted"><Spinner /> Loading…</div>}

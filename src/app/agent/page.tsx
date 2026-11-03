@@ -8,7 +8,7 @@ import { Shell } from '@/components/Shell';
 import { api, useSession } from '@/components/session';
 import { useActivity } from '@/components/useActivity';
 import { ApprovalCard, DecisionCard } from '@/components/RequestCards';
-import { Empty, Pill, Spinner } from '@/components/ui';
+import { Empty, IconCircle, PageHeader, Spinner, Switch } from '@/components/ui';
 import { money } from '@/components/format';
 import { EXAMPLE_SENTENCES } from '@/lib/rules-text';
 import type { PermitRules } from '@/lib/types';
@@ -17,23 +17,30 @@ type Line =
   | { kind: 'user'; text: string }
   | { kind: 'assistant'; text: string }
   | { kind: 'tool'; label: string; detail?: string }
-  | { kind: 'payment'; status: string; text: string; amount: string; merchant: string }
-  | { kind: 'status'; text: string };
+  | { kind: 'payment'; status: string; text: string; amount: string; merchant: string };
 
 const PROMPTS = ['Restock the house for the week', "Get a 2-person tent for Saturday's camping trip", 'Find the cheapest 2-person tent anywhere', 'Buy a 65 inch TV for movie night'];
+const STORES = [
+  { slug: 'freshcart', name: 'FreshCart' },
+  { slug: 'trailhead', name: 'Trailhead' },
+  { slug: 'voltbay', name: 'VoltBay' },
+  { slug: 'traildeals', name: 'TrailDeals' },
+];
 
 function QuickSetup() {
   const { refresh, data } = useSession();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   return (
-    <div className="card p-6">
-      <Bot className="h-6 w-6" />
-      <h2 className="mt-3 text-xl font-bold">Give Scout a permit first</h2>
-      <p className="mt-1 text-sm text-ink-muted">Scout can only pay through Valet. Create its permit with the demo sentence, or write your own.</p>
-      <p className="mt-3 rounded-tile bg-pp-surface p-3 text-sm">“{EXAMPLE_SENTENCES[0]}”</p>
-      {!data?.owner.paypal ? <p className="mt-3 text-sm text-ask">Link PayPal on the overview first, or every payment stops at the gate.</p> : null}
-      <div className="mt-4 flex flex-wrap gap-2">
+    <div className="card mx-auto max-w-xl p-8 text-center">
+      <IconCircle tone="dark" size={56}>
+        <Bot className="h-6 w-6" />
+      </IconCircle>
+      <h2 className="mt-4 text-[22px] font-bold tracking-[-0.03em]">Give Scout a permit first</h2>
+      <p className="mt-1.5 text-ink-muted">Scout can only pay through Valet. Start with the demo permit, or write your own.</p>
+      <p className="mt-4 rounded-tile bg-fill p-4 text-left text-sm">“{EXAMPLE_SENTENCES[0]}”</p>
+      {!data?.owner.paypal ? <p className="mt-3 text-sm font-medium text-ask">Link PayPal on Home first, or every payment stops at the gate.</p> : null}
+      <div className="mt-5 flex flex-wrap justify-center gap-2">
         <button
           className="btn btn-primary"
           disabled={busy}
@@ -132,77 +139,85 @@ function Console() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-[32px] font-bold tracking-[-0.03em]">Agent console</h1>
-          <p className="text-ink-muted">Scout is an ordinary shopping agent. It can only pay through Valet, exactly as a third-party agent would.</p>
-        </div>
-        <div className="flex gap-2">
-          {['freshcart', 'trailhead', 'voltbay', 'traildeals'].map((s) => (
-            <Link key={s} href={`/stores/${s}`} className="btn btn-xs btn-ghost" target="_blank">
-              <Store className="h-3.5 w-3.5" /> {s === 'traildeals' ? 'TrailDeals' : s === 'freshcart' ? 'FreshCart' : s === 'trailhead' ? 'Trailhead' : 'VoltBay'}
-            </Link>
-          ))}
-        </div>
-      </div>
+    <div>
+      <PageHeader
+        title="Agent console"
+        sub="Scout is an ordinary shopping agent. It can only pay through Valet, exactly like a third-party agent would."
+        actions={STORES.map((s) => (
+          <Link key={s.slug} href={`/stores/${s.slug}`} className="btn btn-xs btn-secondary" target="_blank">
+            <Store className="h-3.5 w-3.5" /> {s.name}
+          </Link>
+        ))}
+      />
 
       {!permit ? (
         <QuickSetup />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[1.25fr_1fr]">
-          <section className="card flex min-h-[620px] min-w-0 flex-col">
-            <div className="flex flex-wrap items-center gap-3 border-b border-pp-line p-4">
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-black text-white"><Bot className="h-4 w-4" /></span>
-              <div className="min-w-0">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
+          <section className="card flex min-h-[640px] min-w-0 flex-col overflow-hidden">
+            <div className="flex flex-wrap items-center gap-3 border-b border-pp-line px-5 py-4">
+              <IconCircle tone="dark" size={42}>
+                <Bot className="h-[18px] w-[18px]" />
+              </IconCircle>
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold">{permit.agentName}</p>
-                <p className="truncate text-xs text-ink-muted">{permit.rules.purpose} · {money(permit.spent)} spent · key {permit.tokenPreview}</p>
+                <p className="truncate text-xs text-ink-muted">
+                  {permit.rules.purpose} · {money(permit.spent)} spent · key {permit.tokenPreview}
+                </p>
               </div>
               {demoPermits.length > 1 ? (
-                <select className="input ml-auto h-9 w-auto py-0 text-sm" value={permitId ?? ''} onChange={(e) => setPermitId(e.target.value)} aria-label="Permit">
+                <select className="input h-9 w-auto py-0 text-sm" value={permitId ?? ''} onChange={(e) => setPermitId(e.target.value)} aria-label="Permit">
                   {demoPermits.map((p) => (
-                    <option key={p.id} value={p.id}>{p.agentName} · {p.rules.purpose}</option>
+                    <option key={p.id} value={p.id}>
+                      {p.agentName} · {p.rules.purpose}
+                    </option>
                   ))}
                 </select>
               ) : null}
-              <label className={`ml-auto flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold ${compromised ? 'bg-no text-white' : 'bg-pp-surface text-ink-muted'}`} title="Simulates a naive or compromised agent that obeys instructions hidden in web pages">
-                <input type="checkbox" className="sr-only" checked={compromised} onChange={(e) => setCompromised(e.target.checked)} />
-                <Skull className="h-3.5 w-3.5" /> Compromised agent {compromised ? 'on' : 'off'}
+              <label className={`flex cursor-pointer items-center gap-2 rounded-full py-1 pl-3 pr-1 text-xs font-semibold ${compromised ? 'bg-no-bg text-no' : 'bg-fill text-ink-muted'}`} title="Simulates a naive or compromised agent that obeys instructions hidden in web pages">
+                <Skull className="h-3.5 w-3.5" />
+                <span>Compromised agent {compromised ? 'on' : 'off'}</span>
+                <Switch checked={compromised} onChange={setCompromised} label="Compromised agent" />
               </label>
             </div>
-            <div className="flex-1 space-y-3 overflow-y-auto p-5" aria-live="polite">
+            <div className="flex-1 space-y-3 overflow-y-auto px-5 py-5" aria-live="polite">
               {!lines.length ? (
-                <div className="py-10 text-center">
-                  <p className="font-semibold">Give Scout an errand</p>
-                  <p className="mt-1 text-sm text-ink-muted">Try one of these, then watch Valet decide on the right.</p>
-                  <div className="mt-4 flex flex-wrap justify-center gap-2">
+                <div className="flex h-full flex-col items-center justify-center py-10 text-center">
+                  <p className="text-lg font-semibold">Give Scout an errand</p>
+                  <p className="mt-1 text-sm text-ink-muted">Pick one, then watch Valet decide on the right.</p>
+                  <div className="mt-5 flex max-w-lg flex-wrap justify-center gap-2">
                     {PROMPTS.map((p) => (
-                      <button key={p} className="pill bg-pp-surface px-3 py-2 text-[13px] text-black hover:bg-pp-surface2" onClick={() => void run(p)}>
+                      <button key={p} className="rounded-full bg-fill px-4 py-2.5 text-[13.5px] font-medium hover:bg-fill-strong" onClick={() => void run(p)}>
                         {p}
                       </button>
                     ))}
                   </div>
-                  {compromised ? <p className="mt-4 text-sm text-no">Compromised mode: Scout will obey hidden instructions on store pages. Valet still decides.</p> : null}
+                  {compromised ? <p className="mt-5 max-w-sm text-sm font-medium text-no">Compromised mode: Scout obeys hidden instructions on store pages. Valet still decides.</p> : null}
                 </div>
               ) : null}
               {lines.map((l, i) =>
                 l.kind === 'user' ? (
-                  <div key={i} className="ml-12 rounded-tile bg-black px-4 py-3 text-sm text-white">{l.text}</div>
+                  <div key={i} className="ml-auto w-fit max-w-[80%] rounded-[20px] rounded-br-md bg-ink px-4 py-2.5 text-sm text-white">{l.text}</div>
                 ) : l.kind === 'assistant' ? (
-                  <div key={i} className="mr-12 rounded-tile bg-pp-surface px-4 py-3 text-sm">{l.text}</div>
+                  <div key={i} className="w-fit max-w-[85%] rounded-[20px] rounded-bl-md bg-fill px-4 py-2.5 text-sm">{l.text}</div>
                 ) : l.kind === 'tool' ? (
                   <p key={i} className="flex min-w-0 items-center gap-2 pl-1 text-xs text-ink-muted">
-                    <Check className="h-3.5 w-3.5 shrink-0" /> <span className="shrink-0 whitespace-nowrap">{l.label}</span>
-                    {l.detail ? <span className="min-w-0 truncate">· {l.detail}</span> : null}
+                    <Check className="h-3.5 w-3.5 shrink-0 text-ok" /> <span className="shrink-0 whitespace-nowrap">{l.label}</span>
+                    {l.detail ? <span className="min-w-0 truncate text-ink-soft">· {l.detail}</span> : null}
                   </p>
-                ) : l.kind === 'payment' ? (
-                  <div key={i} className={`mr-12 rounded-tile border px-4 py-3 text-sm ${l.status === 'paid' ? 'border-ok/30 bg-ok-bg' : l.status === 'blocked' || l.status === 'declined' ? 'border-no/30 bg-no-bg' : 'border-[#F5B65A] bg-ask-bg'}`}>
+                ) : (
+                  <div
+                    key={i}
+                    className={`relative max-w-[85%] overflow-hidden rounded-tile px-4 py-3 pl-5 text-sm before:absolute before:inset-y-0 before:left-0 before:w-1 ${
+                      l.status === 'paid' ? 'bg-ok-bg before:bg-[#12B76A]' : l.status === 'blocked' || l.status === 'declined' ? 'bg-no-bg before:bg-no' : 'bg-ask-bg before:bg-[#F59E0B]'
+                    }`}
+                  >
                     <p className="font-semibold">
                       Valet · ${l.amount} at {l.merchant}
                     </p>
-                    <p className="mt-0.5">{l.text}</p>
+                    <p className="mt-0.5 text-ink/80">{l.text}</p>
                   </div>
-                ) : null,
+                ),
               )}
               {status ? (
                 <p className="flex items-center gap-2 pl-1 text-xs text-ink-muted">
@@ -218,17 +233,19 @@ function Console() {
                 void run(input);
               }}
             >
-              <input className="input h-11 py-0" placeholder="Tell Scout what you need…" value={input} onChange={(e) => setInput(e.target.value)} disabled={busy} aria-label="Task for Scout" />
-              <button className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-black text-white disabled:opacity-40" disabled={busy || !input.trim()} aria-label="Send">
+              <input className="input h-12 rounded-full py-0 pl-5" placeholder="Tell Scout what you need…" value={input} onChange={(e) => setInput(e.target.value)} disabled={busy} aria-label="Task for Scout" />
+              <button className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-ink text-white disabled:opacity-35" disabled={busy || !input.trim()} aria-label="Send">
                 {busy ? <Spinner /> : <ArrowUp className="h-4 w-4" />}
               </button>
             </form>
           </section>
 
-          <aside className="min-w-0 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Valet decisions</h2>
-              <Pill tone="blue">Live</Pill>
+          <aside className="min-w-0 space-y-3">
+            <div className="flex items-center justify-between px-1">
+              <h2 className="section-title">Valet decisions</h2>
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-ok">
+                <span className="h-1.5 w-1.5 animate-pulseDot rounded-full bg-[#12B76A]" /> Live
+              </span>
             </div>
             {pending.map((r) => (
               <ApprovalCard key={r.id} r={r} />
@@ -236,13 +253,13 @@ function Console() {
             {others.map((r) => (
               <DecisionCard key={r.id} r={r} />
             ))}
-            {!mine.length ? (
-              <Empty title="No payments yet">Every payment Scout attempts appears here the moment Valet decides.</Empty>
-            ) : null}
-            <Link href="/redteam" className="card flex items-center gap-3 p-4 hover:bg-pp-surface">
-              <ShieldAlert className="h-5 w-5 text-no" />
+            {!mine.length ? <Empty title="No payments yet">Every payment Scout attempts appears here the moment Valet decides.</Empty> : null}
+            <Link href="/redteam" className="card flex items-center gap-3 p-4 transition hover:shadow-lift">
+              <IconCircle tone="no" size={40}>
+                <ShieldAlert className="h-5 w-5" />
+              </IconCircle>
               <span className="text-sm">
-                <span className="font-semibold">Red team lab.</span> Fire six attacks at a live permit.
+                <span className="font-semibold">Red team lab.</span> <span className="text-ink-muted">Fire six attacks at a live permit.</span>
               </span>
             </Link>
           </aside>

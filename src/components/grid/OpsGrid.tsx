@@ -55,7 +55,7 @@ export default function OpsGrid({ rows }: { rows: PaymentRequest[] }) {
   return (
     <div>
       <form
-        className="card flex flex-col gap-3 p-4 md:flex-row md:items-center"
+        className="card flex flex-col gap-3 p-2 pl-5 md:flex-row md:items-center md:rounded-full"
         onSubmit={(e) => {
           e.preventDefault();
           void ask(q);
@@ -63,15 +63,15 @@ export default function OpsGrid({ rows }: { rows: PaymentRequest[] }) {
       >
         <div className="flex flex-1 items-center gap-3">
           <Sparkles className="h-5 w-5 shrink-0 text-pp-blue" />
-          <input className="input h-11 border-0 bg-pp-surface py-0" placeholder="Ask the grid, e.g. blocked payments over $50 by merchant" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Ask the grid in plain English" />
+          <input className="h-12 w-full bg-transparent text-[15px] placeholder:text-ink-soft focus:outline-none" placeholder="Ask anything, e.g. blocked payments over $50 by merchant" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Ask the grid in plain English" />
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-sm btn-primary" disabled={busy || !q.trim()}>
+          <button className="btn btn-primary" disabled={busy || !q.trim()}>
             {busy ? <Spinner /> : 'Ask'}
           </button>
           <button
             type="button"
-            className="btn btn-sm btn-ghost"
+            className="btn btn-ghost"
             onClick={() => {
               if (apiRef.current && initial.current) apiRef.current.setState(initial.current);
               setExplanation(null);
@@ -87,7 +87,7 @@ export default function OpsGrid({ rows }: { rows: PaymentRequest[] }) {
         {SUGGESTIONS.map((s) => (
           <button
             key={s}
-            className="pill bg-pp-surface text-ink-muted hover:bg-pp-surface2"
+            className="pill bg-white px-3 py-1.5 text-ink-muted shadow-card hover:text-ink"
             onClick={() => {
               setQ(s);
               void ask(s);
@@ -103,7 +103,7 @@ export default function OpsGrid({ rows }: { rows: PaymentRequest[] }) {
           <span className="font-semibold">{explanation}</span> {meta ? <span className="text-ink-muted">· {meta} · via AG Grid AI Toolkit</span> : null}
         </p>
       ) : null}
-      <div className="mt-4" style={{ height: 640 }}>
+      <div className="mt-5 overflow-hidden rounded-card shadow-card" style={{ height: 640 }}>
         <AgGridReact<PaymentRequest>
           theme={valetTheme}
           rowData={rows}

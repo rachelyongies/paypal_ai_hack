@@ -36,8 +36,8 @@ export default async function StorePage({ params }: { params: Promise<{ slug: st
   if (!s) notFound();
   const products = productsFor(slug);
   return (
-    <div>
-      <div className="bg-pp-surface px-6 py-2 text-center text-xs text-ink-muted">
+    <div className="min-h-screen bg-white">
+      <div className="bg-fill px-6 py-2 text-center text-xs text-ink-muted">
         Demo merchant inside Valet. <Link className="link" href="/agent">Back to the agent console</Link>
       </div>
       <header className="border-b border-pp-line">

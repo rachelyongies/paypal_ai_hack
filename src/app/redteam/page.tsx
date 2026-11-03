@@ -2,16 +2,40 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Play, ShieldCheck, ShieldX, Swords } from 'lucide-react';
+import { BadgeDollarSign, Copy, Play, Repeat, Route, ShieldCheck, ShieldX, Swords, KeyRound, Syringe } from 'lucide-react';
 import { Shell } from '@/components/Shell';
 import { api, useSession } from '@/components/session';
 import { GuardianLine } from '@/components/RequestCards';
 import { money } from '@/components/format';
-import { Pill, Spinner, StatusPill } from '@/components/ui';
+import { IconCircle, PageHeader, Spinner, StatusPill } from '@/components/ui';
 import type { PaymentRequest } from '@/lib/types';
 
 type Scenario = { id: string; title: string; attack: string; defense: string };
 type Result = { scenario: string; stopped: boolean; outcome: string; requests: PaymentRequest[]; ms: number };
+
+const ICONS: Record<string, typeof Syringe> = {
+  prompt_injection: Syringe,
+  price_tamper: BadgeDollarSign,
+  lookalike: Copy,
+  task_drift: Route,
+  burst: Repeat,
+  revoked_replay: KeyRound,
+};
+
+function Ring({ value, total }: { value: number; total: number }) {
+  const r = 34;
+  const c = 2 * Math.PI * r;
+  const pct = total ? value / total : 0;
+  return (
+    <svg width="88" height="88" viewBox="0 0 88 88" className="shrink-0" aria-hidden>
+      <circle cx="44" cy="44" r={r} fill="none" stroke="#E4E7EB" strokeWidth="8" />
+      <circle cx="44" cy="44" r={r} fill="none" stroke="#12B76A" strokeWidth="8" strokeLinecap="round" strokeDasharray={`${c * pct} ${c}`} transform="rotate(-90 44 44)" style={{ transition: 'stroke-dasharray .6s ease' }} />
+      <text x="44" y="50" textAnchor="middle" fontSize="20" fontWeight="700" fill="#0A0B0D">
+        {value}/{total}
+      </text>
+    </svg>
+  );
+}
 
 function Lab() {
   const { data } = useSession();
@@ -52,66 +76,73 @@ function Lab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="eyebrow">Red team lab</p>
-          <h1 className="text-[32px] font-bold tracking-[-0.03em]">Try to make an agent overspend</h1>
-          <p className="max-w-2xl text-ink-muted">Six real attacks, fired through the same API every agent uses, against a live permit: house shopping up to $250 a week, ask over $75, never over $500 at once, never gift cards, at most 3 buys an hour.</p>
-        </div>
-        <button className="btn btn-primary" onClick={runAll} disabled={!!running || !scenarios.length || !data?.owner.paypal}>
-          {running ? <Spinner /> : <Swords className="h-4 w-4" />} Run all six
-        </button>
-      </div>
+      <PageHeader
+        kicker="Red team lab"
+        title="Try to make an agent overspend"
+        sub="Six real attacks through the same API every agent uses, against a live permit: up to $250 a week, ask above $75, never over $500 at once, never gift cards, at most 3 buys an hour."
+        actions={
+          <button className="btn btn-primary" onClick={runAll} disabled={!!running || !scenarios.length || !data?.owner.paypal}>
+            {running ? <Spinner /> : <Swords className="h-4 w-4" />} Run all six
+          </button>
+        }
+      />
 
       {!data?.owner.paypal ? (
-        <div className="rounded-tile bg-ask-bg px-4 py-3 text-sm text-ask">
-          Link PayPal or the demo wallet on the <Link className="font-semibold underline" href="/app">overview</Link> first, so allowed purchases can really be paid.
+        <div className="rounded-tile bg-ask-bg px-4 py-3 text-sm font-medium text-ask">
+          Link PayPal or the demo wallet on <Link className="underline" href="/app">Home</Link> first, so allowed purchases can really be paid.
         </div>
       ) : null}
 
-      <div className="card flex flex-wrap items-center gap-6 p-5">
-        <div>
-          <p className="eyebrow">Scorecard</p>
-          <p className="mt-1 text-[34px] font-bold tracking-[-0.03em]">
-            {stopped} <span className="text-ink-soft">of {ran.length || scenarios.length}</span> stopped
+      <div className="card flex flex-wrap items-center gap-6 p-6">
+        <Ring value={stopped} total={scenarios.length || 6} />
+        <div className="min-w-0 flex-1">
+          <p className="text-[26px] font-bold tracking-[-0.03em]">
+            {stopped} of {ran.length || scenarios.length} stopped
           </p>
+          <p className="text-sm text-ink-muted">Each attack also lands in your Activity and in PayPal&apos;s Risk Ops view.</p>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {scenarios.map((s) => {
+              const r = results[s.id];
+              return (
+                <span key={s.id} className={`pill ${!r ? 'bg-fill text-ink-muted' : r.stopped ? 'bg-ok-bg text-ok' : 'bg-no-bg text-no'}`}>
+                  {r ? r.stopped ? <ShieldCheck className="h-3.5 w-3.5" /> : <ShieldX className="h-3.5 w-3.5" /> : null}
+                  {s.title}
+                </span>
+              );
+            })}
+          </div>
         </div>
-        <div className="flex flex-1 flex-wrap gap-2">
-          {scenarios.map((s) => {
-            const r = results[s.id];
-            return (
-              <Pill key={s.id} tone={!r ? 'muted' : r.stopped ? 'ok' : 'no'}>
-                {r ? r.stopped ? <ShieldCheck className="h-3.5 w-3.5" /> : <ShieldX className="h-3.5 w-3.5" /> : null}
-                {s.title}
-              </Pill>
-            );
-          })}
-        </div>
-        <p className="text-xs text-ink-muted">Every attack also lands in Activity and Risk Ops.</p>
       </div>
       {error ? <p className="text-sm text-no">{error}</p> : null}
 
       <div className="grid gap-4 md:grid-cols-2">
-        {scenarios.map((s, i) => {
+        {scenarios.map((s) => {
           const r = results[s.id];
           const last = r?.requests[r.requests.length - 1];
+          const Icon = ICONS[s.id] ?? Swords;
           return (
-            <section key={s.id} className={`card p-5 ${r ? (r.stopped ? 'border-ok/25' : 'border-no/40') : ''}`}>
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Attack {i + 1}</p>
-                  <h2 className="mt-1 text-lg font-semibold">{s.title}</h2>
+            <section key={s.id} className="card flex flex-col p-5">
+              <div className="flex items-start gap-3.5">
+                <IconCircle tone={r ? (r.stopped ? 'ok' : 'no') : 'muted'} size={44}>
+                  <Icon className="h-5 w-5" />
+                </IconCircle>
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-[17px] font-semibold tracking-[-0.01em]">{s.title}</h2>
+                  <p className="mt-0.5 text-sm text-ink-muted">{s.attack}</p>
                 </div>
                 <button className="btn btn-sm btn-secondary" onClick={() => void runOne(s.id).catch(() => {})} disabled={!!running || !data?.owner.paypal}>
                   {running === s.id ? <Spinner /> : <Play className="h-4 w-4" />} Run
                 </button>
               </div>
-              <p className="mt-2 text-sm">{s.attack}</p>
-              <p className="mt-1 text-sm text-ink-muted">Defense: {s.defense}</p>
+              <p className="mt-3 text-xs text-ink-muted">
+                <span className="font-semibold text-ink">Defense:</span> {s.defense}
+              </p>
               {r && last ? (
-                <div className={`mt-4 rounded-tile p-4 ${r.stopped ? 'bg-ok-bg' : 'bg-no-bg'}`}>
+                <div className={`mt-4 animate-rise rounded-tile p-4 ${r.stopped ? 'bg-ok-bg' : 'bg-no-bg'}`}>
                   <div className="flex items-center justify-between gap-2">
-                    <p className={`font-semibold ${r.stopped ? 'text-ok' : 'text-no'}`}>{r.stopped ? 'Stopped' : 'Not stopped'} · {r.outcome}</p>
+                    <p className={`text-sm font-semibold ${r.stopped ? 'text-ok' : 'text-no'}`}>
+                      {r.stopped ? 'Stopped' : 'Not stopped'} · {r.outcome}
+                    </p>
                     <StatusPill status={last.status} />
                   </div>
                   <p className="mt-2 text-sm">{last.reason}</p>

@@ -3,7 +3,7 @@
 import type { ICellRendererParams } from 'ag-grid-community';
 import type { PaymentRequest } from '@/lib/types';
 import { money, SIGNAL_LABEL, SOURCE_LABEL } from '../format';
-import { Pill, StatusPill, VerdictPill } from '../ui';
+import { Avatar, Pill, StatusPill, VerdictPill } from '../ui';
 
 type P = ICellRendererParams<PaymentRequest>;
 
@@ -17,7 +17,7 @@ export function VerdictCell(p: P) {
 
 export function AmountCell(p: P) {
   if (p.value === undefined || p.value === null) return null;
-  return <span className={`tabular-nums ${p.node.group ? 'font-bold' : 'font-semibold'}`}>{money(Number(p.value))}</span>;
+  return <span className={`tabular ${p.node.group ? 'font-bold' : 'font-semibold'}`}>{money(Number(p.value))}</span>;
 }
 
 export function RiskCell(p: P) {
@@ -50,9 +50,12 @@ export function SignalsCell(p: P) {
 export function MerchantCell(p: P) {
   if (!p.data) return p.value ? <span className="font-semibold">{String(p.value)}</span> : null;
   return (
-    <span className="flex flex-col leading-tight">
-      <span className="font-semibold">{p.data.merchant.name}</span>
-      <span className="text-[11.5px] text-ink-muted">{p.data.merchant.domain}</span>
+    <span className="flex min-w-0 items-center gap-2.5">
+      <Avatar name={p.data.merchant.name} size={32} />
+      <span className="flex min-w-0 flex-col leading-tight">
+        <span className="truncate font-semibold">{p.data.merchant.name}</span>
+        <span className="truncate text-[11.5px] text-ink-muted">{p.data.merchant.domain}</span>
+      </span>
     </span>
   );
 }
