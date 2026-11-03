@@ -1,0 +1,41 @@
+# Render Blueprint: New > Blueprint, then fill in the secrets marked sync: false.
+services:
+  - type: web
+    name: valet
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: DATA_DIR
+        value: /var/data
+      - key: APP_URL
+        sync: false
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: PAYPAL_WEBHOOK_ID
+        sync: false
+      - key: DEMO_VAULT_ID
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: VALET_MODEL
+        value: claude-opus-5-5
+      - key: NEXT_PUBLIC_AG_GRID_LICENSE_KEY
+        sync: false
+      - key: VALET_SIGNING_KEY
+        sync: false
+    # Keeps permits, activity and the signing key across deploys.
+    # Remove the disk (and DATA_DIR) to run on the free plan.
+    disk:
+      name: valet-data
+      mountPath: /var/data
+      sizeGB: 1
