@@ -26,8 +26,30 @@ PayPal's CEO put it plainly on the Q3 2026 earnings call: agentic commerce "is r
 
 | | |
 | --- | --- |
-| ![Approval](docs/images/agent-ask.jpg) | ![Injection blocked](docs/images/agent-blocked.jpg) |
-| ![Red team](docs/images/redteam-scorecard.jpg) | ![Risk Ops](docs/images/risk-ops-query.jpg) |
+| ![Home: agent spend, approvals and controls in one place](docs/images/home.jpg) | ![A permit written in one sentence, compiled into rules](docs/images/permit-chips.jpg) |
+| ![An agent payment waiting for one tap](docs/images/agent-ask.jpg) | ![A prompt injection blocked before money moved](docs/images/agent-blocked.jpg) |
+| ![Red team: six attacks, six stopped](docs/images/redteam-scorecard.jpg) | ![Risk Ops queried in plain English on AG Grid](docs/images/risk-ops-query.jpg) |
+
+## How it grows PayPal
+
+Open **Growth model** (`/impact`) and move the assumptions live. The base case is illustrative and labelled as such in the app:
+
+| Assumption | Base case |
+| --- | --- |
+| Active accounts that give an agent a permit | 1% of 440M |
+| Agent spend per wallet | $150 a month |
+| New PayPal accounts per adopter | 10% |
+| Revenue per dollar of TPV | 1.77% (Q3 2026: $8.6B revenue on $487.1B TPV) |
+
+That yields **4.84M agent wallets, +440K new PayPal accounts, $8.7B agent TPV and about $154M revenue a year.** At 3% adoption it is about $461M.
+
+![Growth model](docs/images/growth-model.jpg)
+
+Where it comes from: every agent needs a wallet (new accounts), approvals and receipts live on a PayPal surface (weekly engagement), clear rules move the 32% who let agents pick but not pay into checkout (agent TPV, [Accenture](https://www.accenture.com/gb-en/insights/consulting/talk-my-ai-agent)), payments run on the vaulted PayPal wallet (margin), signed intent records settle claims on evidence (lower losses), and verified agent orders open a merchant protection add-on (new revenue line).
+
+## Design
+
+A calm, card-based money app. Each screen has one primary action, amounts come first, and every decision is explained in a plain sentence. Owners see "Paid", "Needs you" and "Blocked"; risk scores, signals and order IDs stay in Risk Ops where PayPal's analysts need them. PayPal blues mark trust and brand moments, black buttons mark decisions, and the freeze switch is always one tap away in the sidebar.
 
 ## Features
 
@@ -38,11 +60,12 @@ PayPal's CEO put it plainly on the Q3 2026 earnings call: agentic commerce "is r
 | Policy engine: amount integrity, never-lists, caps, burst limit, scope, lookalike merchants, budget, duplicates, approval threshold | `src/lib/policy.ts` |
 | AI guardian (Claude Opus 5.5, structured output) with a deterministic fallback that fails closed | `src/lib/guardian.ts` |
 | One-tap approvals with a QR code for the phone | `/app`, `/approve/[id]` |
-| Instant override: pause, revoke, freeze all, unlink PayPal | header, permit cards |
+| Instant override: pause, revoke, freeze all agent payments, unlink PayPal | sidebar switch, Home, permit cards |
 | Activity ledger on AG Grid with master detail decision traces, refunds and evidence | `/app/activity` |
 | Scout, a demo shopping agent (Claude tool use) that can only pay through Valet | `/agent` |
 | Red team lab: six attacks against a live permit | `/redteam` |
 | Risk Ops console for PayPal's risk team, queried in plain English with AG Grid's AI Toolkit | `/ops` |
+| Growth model: PayPal accounts, agent TPV and revenue from live assumptions | `/impact` |
 | Signed receipts and a merchant verifier | `/verify`, `/.well-known/jwks.json` |
 | Concierge: Claude with the PayPal Agent Toolkit, limited to read and refund | `/app` |
 | REST Agent Pay API and an MCP server for any agent | `/developers` |
@@ -139,7 +162,7 @@ Render: **New > Blueprint**, point it at this repo, and fill in the secrets from
 
 ## Demo assets
 
-`npm run record` drives the real app in Chromium and saves feature clips and 2x screenshots to `demo/out/`. `npm run ad` renders the 53 second ad from `demo/ad/ad.html` with an original synthesized soundtrack. The YouTube script is in [`demo/SCRIPT.md`](demo/SCRIPT.md).
+`npm run record` drives the real app in Chromium and saves feature clips and 2x screenshots to `demo/out/`. `npm run ad` renders the 57 second ad from `demo/ad/ad.html` with an original synthesized soundtrack. The YouTube script is in [`demo/SCRIPT.md`](demo/SCRIPT.md).
 
 ## Security notes
 
