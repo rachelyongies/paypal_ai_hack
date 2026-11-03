@@ -130,23 +130,25 @@ export function PayPalLink() {
 
   return (
     <div className="card overflow-hidden">
-      <div className="grid gap-6 p-6 md:grid-cols-[1.2fr_1fr] md:p-8">
+      <div className="grid gap-6 p-6 md:grid-cols-[1.25fr_1fr] md:p-7">
         <div>
-          <p className="eyebrow">Step 1</p>
-          <h2 className="mt-2 text-2xl font-bold tracking-[-0.02em]">Link PayPal once</h2>
-          <p className="mt-2 text-ink-muted">
-            Valet saves your wallet in PayPal&apos;s vault so agents can pay inside the rules you write. Agents never see your login, card or bank.
+          <span className="grid h-11 w-11 place-items-center rounded-full bg-[#E8F0FF] text-pp-blue">
+            <Wallet className="h-5 w-5" />
+          </span>
+          <h2 className="mt-4 text-[22px] font-bold tracking-[-0.03em]">Link PayPal once</h2>
+          <p className="mt-1.5 text-[15px] text-ink-muted">
+            Your wallet is saved in PayPal&apos;s vault, so agents can pay inside the rules you write. Agents never see your login, card or bank.
           </p>
           <ul className="mt-4 space-y-2 text-sm">
-            <li className="flex gap-2"><ShieldCheck className="h-4 w-4 shrink-0 text-ok" /> Approve once in PayPal; revoke any time.</li>
-            <li className="flex gap-2"><ShieldCheck className="h-4 w-4 shrink-0 text-ok" /> PayPal buyer protection still applies.</li>
+            <li className="flex gap-2"><ShieldCheck className="h-4 w-4 shrink-0 text-ok" /> Approve once in PayPal, revoke any time</li>
+            <li className="flex gap-2"><ShieldCheck className="h-4 w-4 shrink-0 text-ok" /> PayPal buyer protection still applies</li>
           </ul>
         </div>
         <div className="flex flex-col justify-center gap-3">
           {sandbox ? (
             <div className="min-h-[48px]">
               {phase === 'loading' || phase === 'idle' ? (
-                <div className="flex h-12 items-center justify-center gap-2 rounded-full bg-pp-surface text-sm text-ink-muted"><Spinner /> Loading PayPal…</div>
+                <div className="flex h-12 items-center justify-center gap-2 rounded-full bg-fill text-sm text-ink-muted"><Spinner /> Loading PayPal…</div>
               ) : null}
               {createElement('paypal-button', {
                 ref: button,
@@ -156,13 +158,13 @@ export function PayPalLink() {
                 style: { display: phase === 'ready' || phase === 'linking' ? 'block' : 'none', width: '100%' },
               })}
               {phase === 'linking' ? <p className="mt-2 flex items-center gap-2 text-sm text-ink-muted"><Spinner /> Saving your PayPal wallet to the vault…</p> : null}
-              {phase === 'ineligible' ? <p className="text-sm text-ink-muted">PayPal saving is not enabled on this sandbox app yet. Turn on Save payment methods, or use the demo wallet.</p> : null}
+              {phase === 'ineligible' ? <p className="text-sm text-ink-muted">Saving PayPal is not enabled on this sandbox app yet. Turn on Save payment methods, or use the demo wallet.</p> : null}
             </div>
           ) : (
-            <p className="rounded-tile bg-pp-surface px-4 py-3 text-sm text-ink-muted">PayPal sandbox keys are not configured, so Valet runs its labelled PayPal simulator.</p>
+            <p className="rounded-tile bg-fill px-4 py-3 text-sm text-ink-muted">PayPal sandbox keys are not configured, so Valet runs its labelled PayPal simulator.</p>
           )}
           {data?.status.demoWallet ? (
-            <button className="btn btn-secondary w-full" onClick={useDemo} disabled={demoBusy}>
+            <button className="btn btn-primary w-full" onClick={useDemo} disabled={demoBusy}>
               {demoBusy ? <Spinner /> : <Wallet className="h-4 w-4" />} Use the demo wallet{sandbox ? ' (sandbox buyer)' : ''}
             </button>
           ) : null}

@@ -12,15 +12,19 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    @apply bg-white text-ink font-sans;
+    @apply bg-canvas text-ink font-sans;
     font-feature-settings: 'cv11', 'ss01';
+    font-optical-sizing: auto;
   }
   h1, h2, h3 {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
   :focus-visible {
     outline: 2px solid #0066f5;
     outline-offset: 2px;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -32,7 +36,10 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors duration-150 h-11 px-6 text-[15px] whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold transition duration-150 h-11 px-5 text-[15px] whitespace-nowrap active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45 disabled:active:scale-100;
+  }
+  .btn-lg {
+    @apply h-[52px] px-7 text-base;
   }
   .btn-sm {
     @apply h-9 px-4 text-sm;
@@ -41,51 +48,90 @@
     @apply h-8 px-3 text-[13px];
   }
   .btn-primary {
-    @apply bg-black text-white hover:bg-[#333] active:bg-[#4d4d4d];
+    @apply bg-ink text-white hover:bg-[#25272C];
   }
   .btn-blue {
     @apply bg-pp-blue text-white hover:bg-pp-blueHover;
   }
   .btn-secondary {
-    @apply bg-white text-black border border-black hover:bg-pp-surface;
+    @apply bg-fill text-ink hover:bg-fill-strong;
+  }
+  .btn-outline {
+    @apply bg-white text-ink ring-1 ring-ink/15 hover:bg-fill;
   }
   .btn-ghost {
-    @apply bg-transparent text-black hover:bg-pp-surface;
+    @apply bg-transparent text-ink hover:bg-fill;
   }
   .btn-danger {
-    @apply bg-white text-no border border-no/60 hover:bg-no-bg;
+    @apply bg-no-bg text-no hover:bg-[#FBDCE2];
+  }
+  .btn-white {
+    @apply bg-white text-ink hover:bg-white/90;
   }
   .card {
-    @apply bg-white rounded-card border border-black/[0.06] shadow-card;
+    @apply bg-white rounded-card shadow-card;
   }
   .surface {
-    @apply bg-pp-surface rounded-card;
+    @apply bg-fill rounded-card;
   }
   .eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.08em] text-ink-muted;
+    @apply text-[13px] font-medium text-ink-muted;
+  }
+  .kicker {
+    @apply text-[12px] font-semibold uppercase tracking-[0.12em] text-ink-muted;
   }
   .pill {
     @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold leading-none whitespace-nowrap;
   }
   .input {
-    @apply w-full rounded-tile border border-pp-line bg-white px-4 py-3 text-[15px] text-black placeholder:text-ink-soft focus:border-pp-blue focus:outline-none focus:ring-2 focus:ring-pp-blue/25;
+    @apply w-full rounded-tile border-0 bg-fill px-4 py-3 text-[15px] text-ink placeholder:text-ink-soft transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-pp-blue/40;
   }
   .link {
-    @apply font-semibold text-pp-blue hover:text-pp-blueHover underline-offset-4 hover:underline;
+    @apply font-semibold text-pp-blue hover:text-pp-blueHover;
   }
   .kbd {
-    @apply rounded-md border border-pp-line bg-pp-surface px-1.5 py-0.5 font-mono text-[12px];
+    @apply rounded-md bg-fill px-1.5 py-0.5 font-mono text-[12px];
   }
   .code {
-    @apply rounded-tile bg-[#0B1020] text-[#E6EDF7] font-mono text-[12.5px] leading-relaxed p-4 overflow-x-auto;
+    @apply rounded-tile bg-[#0B0D14] text-[#E6EDF7] font-mono text-[12.5px] leading-relaxed p-4 overflow-x-auto;
+  }
+  .page-title {
+    @apply text-[30px] font-bold leading-tight tracking-[-0.035em];
+  }
+  .section-title {
+    @apply text-[17px] font-semibold tracking-[-0.01em];
   }
 }
 
-/* AG Grid: keep cell renderers on PayPal's type scale. */
-.ag-theme-valet .ag-cell {
-  display: flex;
-  align-items: center;
+/* AG Grid detail rows inherit nowrap from cells; let the panel wrap. */
+.ag-full-width-row .whitespace-normal {
+  white-space: normal;
 }
-.valet-flash {
-  animation: flash 1.6s ease-out;
+
+/* Range sliders in the PayPal blue. */
+input[type='range'].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #0066f5 var(--p, 50%), #e4e7eb var(--p, 50%));
+  outline: none;
+}
+input[type='range'].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.25), 0 0 0 1px rgba(16, 24, 40, 0.08);
+  cursor: pointer;
+}
+input[type='range'].slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  border: 0;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.25);
 }
