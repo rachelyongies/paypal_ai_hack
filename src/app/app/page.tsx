@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Bell, Bot, Check, ChevronRight, Plus, ReceiptText, RotateCcw, ShieldAlert, Snowflake, Unlink } from 'lucide-react';
+import { ArrowRight, Bell, Bot, Check, ChevronRight, Plus, ReceiptText, RotateCcw, ShieldAlert, Snowflake, TrendingUp, Unlink } from 'lucide-react';
 import { Shell } from '@/components/Shell';
 import { PayPalLink } from '@/components/PayPalLink';
 import { AgentRow } from '@/components/PermitCard';
@@ -303,6 +303,16 @@ function Home() {
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold">Try to trick it</span>
                 <span className="block text-xs text-ink-muted">Six attacks against a live permit</span>
+              </span>
+              <ArrowRight className="h-4 w-4 text-ink-soft" />
+            </Link>
+            <Link href="/impact" className="card flex items-center gap-3 p-4 transition hover:shadow-lift">
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-[#E8F0FF] text-pp-blue">
+                <TrendingUp className="h-5 w-5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-semibold">How this grows PayPal</span>
+                <span className="block text-xs text-ink-muted">Users, volume and revenue model</span>
               </span>
               <ArrowRight className="h-4 w-4 text-ink-soft" />
             </Link>

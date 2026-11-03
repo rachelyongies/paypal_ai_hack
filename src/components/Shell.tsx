@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
-import { BadgeCheck, Bot, Code2, House, Plus, Radar, ReceiptText, ShieldAlert, Snowflake, Wallet } from 'lucide-react';
+import { BadgeCheck, Bot, Code2, House, Plus, Radar, ReceiptText, ShieldAlert, Snowflake, TrendingUp, Wallet } from 'lucide-react';
 import { Footer, Logo, LogoMark, Switch } from './ui';
 import { api, SessionProvider, useSession } from './session';
 
@@ -26,6 +26,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   {
     title: 'For PayPal',
     items: [
+      { href: '/impact', label: 'Growth model', icon: TrendingUp },
       { href: '/ops', label: 'Risk Ops', icon: Radar },
     ],
   },
