@@ -32,3 +32,32 @@ export const EXAMPLE_SENTENCES = [
   'Groceries only, up to $150 a week, from FreshCart. Ask me above $60.',
   'Book my work travel up to $1,200 a month. Always ask me before paying. Never more than $600 at once.',
 ];
+
+export interface PermitTemplate {
+  id: string;
+  label: string;
+  blurb: string;
+  icon: 'basket' | 'plane' | 'repeat' | 'gift' | 'pen';
+  sentence: string;
+}
+
+/** Ready-made permits: one tap fills a sentence the owner can still edit. */
+export const TEMPLATES: PermitTemplate[] = [
+  { id: 'home', label: 'Groceries and home', blurb: 'Weekly restocks', icon: 'basket', sentence: EXAMPLE_SENTENCES[0] },
+  { id: 'travel', label: 'Work travel', blurb: 'Flights and hotels', icon: 'plane', sentence: EXAMPLE_SENTENCES[2] },
+  {
+    id: 'subs',
+    label: 'Subscriptions',
+    blurb: 'Renewals only',
+    icon: 'repeat',
+    sentence: 'Renew my software and streaming subscriptions, up to $80 a month. Ask me above $25. Never more than $40 at once.',
+  },
+  {
+    id: 'gifts',
+    label: 'Gifts',
+    blurb: 'Birthdays and holidays',
+    icon: 'gift',
+    sentence: 'Buy birthday gifts for family, up to $150 a month. Ask me above $60. Never gift cards or crypto.',
+  },
+  { id: 'custom', label: 'Custom', blurb: 'Write your own', icon: 'pen', sentence: '' },
+];
