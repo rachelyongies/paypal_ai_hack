@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-white text-ink font-sans;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 2px solid #0066f5;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors duration-150 h-11 px-6 text-[15px] whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-sm {
+    @apply h-9 px-4 text-sm;
+  }
+  .btn-xs {
+    @apply h-8 px-3 text-[13px];
+  }
+  .btn-primary {
+    @apply bg-black text-white hover:bg-[#333] active:bg-[#4d4d4d];
+  }
+  .btn-blue {
+    @apply bg-pp-blue text-white hover:bg-pp-blueHover;
+  }
+  .btn-secondary {
+    @apply bg-white text-black border border-black hover:bg-pp-surface;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-black hover:bg-pp-surface;
+  }
+  .btn-danger {
+    @apply bg-white text-no border border-no/60 hover:bg-no-bg;
+  }
+  .card {
+    @apply bg-white rounded-card border border-black/[0.06] shadow-card;
+  }
+  .surface {
+    @apply bg-pp-surface rounded-card;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.08em] text-ink-muted;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold leading-none whitespace-nowrap;
+  }
+  .input {
+    @apply w-full rounded-tile border border-pp-line bg-white px-4 py-3 text-[15px] text-black placeholder:text-ink-soft focus:border-pp-blue focus:outline-none focus:ring-2 focus:ring-pp-blue/25;
+  }
+  .link {
+    @apply font-semibold text-pp-blue hover:text-pp-blueHover underline-offset-4 hover:underline;
+  }
+  .kbd {
+    @apply rounded-md border border-pp-line bg-pp-surface px-1.5 py-0.5 font-mono text-[12px];
+  }
+  .code {
+    @apply rounded-tile bg-[#0B1020] text-[#E6EDF7] font-mono text-[12.5px] leading-relaxed p-4 overflow-x-auto;
+  }
+}
+
+/* AG Grid: keep cell renderers on PayPal's type scale. */
+.ag-theme-valet .ag-cell {
+  display: flex;
+  align-items: center;
+}
+.valet-flash {
+  animation: flash 1.6s ease-out;
+}
