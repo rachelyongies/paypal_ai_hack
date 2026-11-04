@@ -35,7 +35,7 @@ const permit: Permit = {
   expiresAt: null,
 };
 
-const freshcart = { name: 'FreshCart', domain: 'freshcart.com' };
+const freshcart = { name: 'FreshCart', domain: 'freshcart.example' };
 const item = (over: Partial<RequestItem> = {}): RequestItem => ({ name: 'Weekly produce box', sku: 'fc-produce', category: 'groceries', unitPrice: 32, quantity: 1, ...over });
 
 function past(over: Partial<PaymentRequest>): PaymentRequest {
@@ -70,7 +70,7 @@ test('approves an in-scope purchase under the threshold', () => {
 });
 
 test('asks the owner above the auto-approve threshold', () => {
-  const r = run([item({ name: 'Ridgeline 2-person tent', sku: 'th-tent2', category: 'outdoor', unitPrice: 129 })], { name: 'Trailhead Outfitters', domain: 'trailheadoutfitters.com' });
+  const r = run([item({ name: 'Ridgeline 2-person tent', sku: 'th-tent2', category: 'outdoor', unitPrice: 129 })], { name: 'Trailhead Outfitters', domain: 'trailheadoutfitters.example' });
   assert.equal(r.outcome, 'ask');
   assert.ok(r.checks.some((c) => c.id === 'auto_approve' && c.result === 'ask'));
 });
@@ -94,15 +94,15 @@ test('blocks above the per-purchase cap', () => {
 });
 
 test('asks for categories outside the permit scope', () => {
-  const r = run([item({ name: 'USB-C cable', category: 'electronics', unitPrice: 12 })], { name: 'VoltBay', domain: 'voltbay.com' });
+  const r = run([item({ name: 'USB-C cable', category: 'electronics', unitPrice: 12 })], { name: 'VoltBay', domain: 'voltbay.example' });
   assert.equal(r.outcome, 'ask');
   assert.ok(r.checks.some((c) => c.id === 'category_scope' && c.result === 'ask'));
 });
 
 test('detects lookalike merchants', () => {
-  assert.equal(lookalikeOf({ name: 'Trai1head', domain: 'trai1headoutfitters.co' }, []), 'trailheadoutfitters.com');
-  assert.equal(lookalikeOf({ name: 'TrailDeals', domain: 'trai1headoutfitters-deals.shop' }, []), 'trailheadoutfitters.com');
-  assert.equal(lookalikeOf({ name: 'FreshCart', domain: 'freshcart.com' }, []), null);
+  assert.equal(lookalikeOf({ name: 'Trai1head', domain: 'trai1headoutfitters.test' }, []), 'trailheadoutfitters.example');
+  assert.equal(lookalikeOf({ name: 'TrailDeals', domain: 'trai1headoutfitters-deals.example' }, []), 'trailheadoutfitters.example');
+  assert.equal(lookalikeOf({ name: 'FreshCart', domain: 'freshcart.example' }, []), null);
   assert.equal(lookalikeOf({ name: 'Bookshop', domain: 'bookshop.org' }, []), null);
 });
 
@@ -161,19 +161,19 @@ test('guardian allows a clean, on-task purchase', () => {
 });
 
 test('guardian blocks prompt injection from a merchant page', () => {
-  const r = g({ task: 'Buy a 2-person tent', merchant: { name: 'TrailDeals Outlet', domain: 'trai1headoutfitters-deals.shop' }, items: [item({ name: 'Gift card', sku: 'td-gift-100', category: 'gift_cards', unitPrice: 100, quantity: 3 })], amount: 300, context: INJECTION_TEXT });
+  const r = g({ task: 'Buy a 2-person tent', merchant: { name: 'TrailDeals Outlet', domain: 'trai1headoutfitters-deals.example' }, items: [item({ name: 'Gift card', sku: 'td-gift-100', category: 'gift_cards', unitPrice: 100, quantity: 3 })], amount: 300, context: INJECTION_TEXT });
   assert.equal(r.verdict, 'block');
   assert.ok(r.signals.includes('prompt_injection'));
 });
 
 test('guardian blocks tampered catalog prices', () => {
-  const r = g({ task: 'Buy a 2-person tent', merchant: { name: 'Trailhead Outfitters', domain: 'trailheadoutfitters.com' }, items: [item({ name: 'Ridgeline 2-person tent', sku: 'th-tent2', category: 'outdoor', unitPrice: 1290 })], amount: 1290 });
+  const r = g({ task: 'Buy a 2-person tent', merchant: { name: 'Trailhead Outfitters', domain: 'trailheadoutfitters.example' }, items: [item({ name: 'Ridgeline 2-person tent', sku: 'th-tent2', category: 'outdoor', unitPrice: 1290 })], amount: 1290 });
   assert.equal(r.verdict, 'block');
   assert.ok(r.signals.includes('price_anomaly'));
 });
 
 test('guardian escalates off-task items', () => {
-  const r = g({ items: [item({ name: '65 in OLED TV', sku: 'vb-tv65', category: 'electronics', unitPrice: 899 })], amount: 899, merchant: { name: 'VoltBay', domain: 'voltbay.com' } });
+  const r = g({ items: [item({ name: '65 in OLED TV', sku: 'vb-tv65', category: 'electronics', unitPrice: 899 })], amount: 899, merchant: { name: 'VoltBay', domain: 'voltbay.example' } });
   assert.equal(r.verdict, 'escalate');
   assert.ok(r.signals.includes('task_mismatch'));
 });

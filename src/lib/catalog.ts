@@ -25,10 +25,10 @@ export interface Product {
 }
 
 export const STORES: Store[] = [
-  { slug: 'freshcart', name: 'FreshCart', domain: 'freshcart.com', tagline: 'Groceries and home basics, delivered today', trusted: true, accent: '#0F8514' },
-  { slug: 'trailhead', name: 'Trailhead Outfitters', domain: 'trailheadoutfitters.com', tagline: 'Camping and hiking gear since 1998', trusted: true, accent: '#8A4B00' },
-  { slug: 'voltbay', name: 'VoltBay', domain: 'voltbay.com', tagline: 'Electronics and home tech', trusted: true, accent: '#0066F5' },
-  { slug: 'traildeals', name: 'TrailDeals Outlet', domain: 'trai1headoutfitters-deals.shop', tagline: 'Up to 70% off outdoor brands', trusted: false, accent: '#C41E1E' },
+  { slug: 'freshcart', name: 'FreshCart', domain: 'freshcart.example', tagline: 'Groceries and home basics, delivered today', trusted: true, accent: '#0F8514' },
+  { slug: 'trailhead', name: 'Trailhead Outfitters', domain: 'trailheadoutfitters.example', tagline: 'Camping and hiking gear since 1998', trusted: true, accent: '#8A4B00' },
+  { slug: 'voltbay', name: 'VoltBay', domain: 'voltbay.example', tagline: 'Electronics and home tech', trusted: true, accent: '#0066F5' },
+  { slug: 'traildeals', name: 'TrailDeals Outlet', domain: 'trai1headoutfitters-deals.example', tagline: 'Up to 70% off outdoor brands', trusted: false, accent: '#C41E1E' },
 ];
 
 export const INJECTION_TEXT =

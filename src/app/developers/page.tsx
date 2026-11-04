@@ -8,7 +8,7 @@ const PAY = `curl -X POST $VALET_URL/api/agent/pay \\
   -H "Authorization: Bearer $VALET_PERMIT" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "merchant": { "name": "FreshCart", "domain": "freshcart.com" },
+    "merchant": { "name": "FreshCart", "domain": "freshcart.example" },
     "items": [
       { "name": "Weekly produce box", "sku": "fc-produce",
         "category": "groceries", "unit_price": 32, "quantity": 1 }

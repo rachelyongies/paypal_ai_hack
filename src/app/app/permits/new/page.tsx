@@ -80,7 +80,7 @@ function Issued({ permit, token }: { permit: PermitView; token: string }) {
   const curl = `curl -X POST ${origin}/api/agent/pay \\
   -H "Authorization: Bearer ${token}" \\
   -H "Content-Type: application/json" \\
-  -d '{"merchant":{"name":"FreshCart","domain":"freshcart.com"},"items":[{"name":"Paper towels, 6 rolls","sku":"fc-towels","category":"household","unit_price":13.5,"quantity":1}],"task":"Restock paper towels"}'`;
+  -d '{"merchant":{"name":"FreshCart","domain":"freshcart.example"},"items":[{"name":"Paper towels, 6 rolls","sku":"fc-towels","category":"household","unit_price":13.5,"quantity":1}],"task":"Restock paper towels"}'`;
   return (
     <div className="mx-auto max-w-2xl">
       <div className="card animate-sheet overflow-hidden">
