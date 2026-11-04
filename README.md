@@ -9,6 +9,28 @@ Built for the [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/)
 
 ![Valet landing page](docs/images/landing-hero.jpg)
 
+## For judges: try it in 5 minutes
+
+No install and no PayPal login needed. Each visitor gets a private demo account.
+
+1. Open the live demo and click **Open the demo**.
+2. On Home, click **Use the demo wallet** (a vaulted PayPal sandbox wallet), or **Link PayPal** with a PayPal sandbox personal account.
+3. Click **New permit**, pick the **Groceries and home** template, click **Turn into rules**, check the chips, then click **Issue permit to Scout**.
+4. Open **Agent console** and run the prompts in order. "Restock the house for the week" is paid at once. "Get a 2-person tent for Saturday's camping trip" is over $75, so it waits for your one-tap approval. "Buy a 65 inch TV for movie night" is outside the permit, so it asks you. Then switch **Compromised agent** on and run "Find the cheapest 2-person tent anywhere" to watch Valet block a prompt injection.
+5. Open **Red team** and click **Run all six**: six attacks, six stopped.
+6. Open **Activity**, open a paid row, then try **Refund**, **Evidence** and **Verify receipt**.
+7. Open **Risk Ops** and ask "blocked payments over $50 by merchant".
+8. Open **Growth model** and move the adoption slider.
+
+**What the status line means.** The bottom of the sidebar shows which services are live:
+
+| Label | Meaning |
+| --- | --- |
+| PayPal sandbox | Real PayPal sandbox calls: Vault v3, Orders v2, Refunds and webhooks |
+| PayPal simulator | No PayPal keys are set; a clearly labelled simulator with the same API shapes |
+| Claude guardian | Claude Opus 5.5 compiles permits and checks the intent of every payment |
+| Rules guardian | No Anthropic key is set; a deterministic fallback that fails closed |
+
 ## Why
 
 74% of consumers let AI agents execute tasks, but only 9% let them complete purchases ([Accenture Consumer Pulse Research 2026](https://www.accenture.com/gb-en/insights/consulting/talk-my-ai-agent), 25,590 consumers, 16 countries). Payment is the highest hurdle in the whole journey. Accenture names the four safeguards that unlock it: configurable permissions, instant override, clear recourse and data safeguards. Valet ships all four on PayPal rails.
@@ -125,7 +147,7 @@ Open http://localhost:3000. With no keys, Valet runs a labelled PayPal simulator
 curl -X POST "$VALET_URL/api/agent/pay" \
   -H "Authorization: Bearer $VALET_PERMIT" \
   -H "Content-Type: application/json" \
-  -d '{"merchant":{"name":"FreshCart","domain":"freshcart.com"},"items":[{"name":"Paper towels, 6 rolls","sku":"fc-towels","category":"household","unit_price":13.5,"quantity":1}],"task":"Restock paper towels"}'
+  -d '{"merchant":{"name":"FreshCart","domain":"freshcart.example"},"items":[{"name":"Paper towels, 6 rolls","sku":"fc-towels","category":"household","unit_price":13.5,"quantity":1}],"task":"Restock paper towels"}'
 ```
 
 Claude Desktop (MCP), in `claude_desktop_config.json`:
@@ -154,7 +176,7 @@ npm test
 npm run smoke
 ```
 
-`npm test` runs 19 unit tests on the policy engine, compiler and guardian. `npm run smoke` runs 39 end-to-end checks over HTTP against a running server (`BASE_URL`), including all six red team attacks.
+`npm test` runs 19 unit tests on the policy engine, compiler and guardian. `npm run smoke` runs 38 end-to-end checks over HTTP against a running server (`BASE_URL`), including all six red team attacks. Run it in simulator mode, or in sandbox mode with `DEMO_VAULT_ID` set so the demo wallet can link.
 
 ## Deploy
 
@@ -163,6 +185,15 @@ Render: **New > Blueprint**, point it at this repo, and fill in the secrets from
 ## Demo assets
 
 `npm run record` drives the real app in Chromium and saves feature clips and 2x screenshots to `demo/out/`. `npm run ad` renders the 57 second ad from `demo/ad/ad.html` with an original synthesized soundtrack, plus the YouTube thumbnail from `demo/ad/thumbnail.html`. The YouTube script is in [`demo/SCRIPT.md`](demo/SCRIPT.md).
+
+## Limitations
+
+- Sandbox only. No live PayPal money moves, and the app never asks for real PayPal credentials.
+- Data lives in a JSON file (`DATA_DIR`), which suits a demo; production would use a database.
+- Demo accounts are anonymous browser sessions, with no sign-up.
+- The stores, products and the persona "Maya" are fictional. Demo stores use reserved `.example` domains, so no real business is depicted.
+- The growth model is illustrative. Only PayPal's 440M accounts and 1.77% revenue per dollar of TPV come from reported Q3 2026 results.
+- AG Grid Enterprise shows a trial watermark until `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` is set.
 
 ## Security notes
 
@@ -190,4 +221,6 @@ PayPal (Vault v3, Orders v2, Payments, Webhooks, JS SDK v6, Agent Toolkit), Clau
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+Valet's code is MIT. See [LICENSE](LICENSE).
+
+Dependencies keep their own licenses: MIT, ISC, Apache-2.0 and OFL-1.1 (the Inter font), except AG Grid Enterprise, which is commercial. It runs in trial mode without a key; set `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` with a key from AG Grid, a hackathon sponsor. The soundtrack in the demo assets is synthesized from scratch by `scripts/make-music.py`, and every screenshot is of Valet itself.
