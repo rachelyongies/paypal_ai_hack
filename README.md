@@ -184,7 +184,7 @@ Render: **New > Blueprint**, point it at this repo, and fill in the secrets from
 
 ## Demo assets
 
-`npm run record` drives the real app in Chromium and saves feature clips and 2x screenshots to `demo/out/`. `npm run ad` renders the 57 second ad from `demo/ad/ad.html` with an original synthesized soundtrack, plus the YouTube thumbnail from `demo/ad/thumbnail.html`. The YouTube script is in [`demo/SCRIPT.md`](demo/SCRIPT.md).
+`npm run record` drives the real app in Chromium and saves feature clips and 2x screenshots to `demo/out/`. `npm run ad` renders the 60 second ad (1080p, 60 fps) from `demo/ad/ad.html` with an original synthesized soundtrack, plus the YouTube thumbnail from `demo/ad/thumbnail.html`. The YouTube script is in [`demo/SCRIPT.md`](demo/SCRIPT.md).
 
 ## Limitations
 
