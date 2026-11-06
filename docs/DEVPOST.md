@@ -10,7 +10,7 @@ Copy each block into the matching field on Devpost. Replace the two placeholder 
 
 - Try it: `https://your-valet.onrender.com` (replace)
 - Video: `https://youtu.be/...` (replace)
-- Code: https://github.com/rachelyongies/valet
+- Code: https://github.com/rachelyongies/paypal_ai_hack
 
 ---
 
