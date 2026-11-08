@@ -2,6 +2,8 @@
 
 **Let agents pay. Keep the keys.** Valet gives any AI agent a scoped, revocable permission to pay with PayPal, and checks every payment against what you actually asked for.
 
+Not another shopping agent: Valet is the trust layer every agent needs before it pays with PayPal, whether it shops, pays a contractor when a job is done, or settles with another agent.
+
 Built for the [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/). Sandbox prototype; not affiliated with or endorsed by PayPal.
 
 - **Demo video:** add your YouTube link

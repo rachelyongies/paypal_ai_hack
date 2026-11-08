@@ -4,7 +4,7 @@ Copy each block into the matching field on Devpost. Replace the two placeholder 
 
 **Project name:** Valet
 
-**Elevator pitch:** A valet key for AI agents to pay with PayPal: scoped, revocable permits, one-tap approvals, and an AI guardian that blocks manipulated purchases.
+**Elevator pitch:** Not another shopping agent: the trust layer every AI agent needs to pay with PayPal. Scoped, revocable permits, one-tap approvals, and a guardian that blocks manipulated payments.
 
 **Links**
 
@@ -23,6 +23,14 @@ Today people get two bad choices: hand an agent their whole wallet, or approve e
 ## What it does
 
 Valet gives any AI agent a scoped, revocable permission to pay with PayPal, and checks every payment against what the person actually asked for.
+
+It's for anyone who wants to hand an agent a task without handing over their wallet, and for PayPal, which needs agent payments people trust.
+
+**One key, any agent.** PayPal's brief imagines agents that shop, pay contractors when a job is done, and settle with other agents. Each needs the same thing before a person hands it money, and Valet provides it:
+
+- **Shopping agents:** Scout, the built-in demo agent, shops and pays inside its permit.
+- **Contractor payouts:** an assistant pays a finished $180 job through the REST API at once, and anything above the owner's limit waits for one tap.
+- **Agent-to-agent settlement:** every payment carries an ES256-signed receipt, so a seller's agent can check that the buyer's agent was authorized.
 
 1. **Link PayPal once.** The PayPal JS SDK v6 save flow vaults the wallet. Agents never see the login or the payment token.
 2. **Write the rules in a sentence.** "Groceries up to $250 a week, ask me above $75, never gift cards." Claude turns it into rules shown as chips the owner checks before issuing.
