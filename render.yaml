@@ -3,7 +3,7 @@ services:
   - type: web
     name: valet
     runtime: node
-    plan: starter
+    plan: free
     region: oregon
     buildCommand: npm ci && npm run build
     startCommand: npm start
@@ -13,8 +13,6 @@ services:
         value: "22"
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
-      - key: DATA_DIR
-        value: /var/data
       - key: PAYPAL_CLIENT_ID
         sync: false
       - key: PAYPAL_CLIENT_SECRET
@@ -31,9 +29,11 @@ services:
         sync: false
       - key: VALET_SIGNING_KEY
         sync: false
-    # Keeps permits, activity and the signing key across deploys.
-    # Remove the disk (and DATA_DIR) to run on the free plan.
-    disk:
-      name: valet-data
-      mountPath: /var/data
-      sizeGB: 1
+    # Free plan: the service sleeps after about 15 idle minutes and its files reset
+    # on restart, so every visit starts with fresh demo data. For an always-on
+    # service that keeps data, use plan: starter and uncomment the disk below.
+    # disk:
+    #   name: valet-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # (and add an env var DATA_DIR=/var/data)
