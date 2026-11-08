@@ -70,7 +70,12 @@ export function requestColumns(opts: { ops?: boolean } = {}): ColDef<PaymentRequ
     { field: 'reason', headerName: 'Why', filter: 'agTextColumnFilter', minWidth: 260, flex: 1.4, tooltipField: 'reason' },
     { colId: 'orderId', headerName: 'PayPal order', valueGetter: (p: ValueGetterParams<PaymentRequest>) => p.data?.paypal?.orderId ?? '', minWidth: 170, cellClass: 'font-mono text-[11.5px]', hide: !opts.ops },
   ];
-  return cols;
+  if (!opts.ops) return cols;
+  // Risk teams read the decision and the reason first, so Risk Ops leads with them.
+  const first = ['createdAt', 'merchant', 'amount', 'verdict', 'reason', 'signals', 'riskScore'];
+  const key = (c: ColDef<PaymentRequest>) => c.colId ?? String(c.field);
+  const rank = (c: ColDef<PaymentRequest>) => (first.includes(key(c)) ? first.indexOf(key(c)) : first.length);
+  return [...cols].sort((a, b) => rank(a) - rank(b));
 }
 
 /** Column descriptions handed to AG Grid's AI Toolkit so the model understands the data. */
