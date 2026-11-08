@@ -39,7 +39,13 @@ export async function POST(req: Request) {
     return new Response('Bad JSON', { status: 400 });
   }
   let verified: boolean | 'skipped' = 'skipped';
-  if (paypalMode() === 'sandbox' && process.env.PAYPAL_WEBHOOK_ID) {
+  // Against real PayPal, never change state from an event PayPal has not signed.
+  // Only the labelled simulator (no PayPal keys) accepts unsigned test events.
+  if (paypalMode() === 'sandbox') {
+    if (!process.env.PAYPAL_WEBHOOK_ID) {
+      logWebhook({ id: event.id ?? 'unknown', at: nowIso(), eventType: event.event_type ?? 'unknown', verified: false });
+      return new Response('Webhook verification is not configured: set PAYPAL_WEBHOOK_ID', { status: 401 });
+    }
     verified = await verifyWebhook(req.headers, event).catch(() => false);
     if (!verified) {
       logWebhook({ id: event.id ?? 'unknown', at: nowIso(), eventType: event.event_type ?? 'unknown', verified: false });

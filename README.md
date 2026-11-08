@@ -201,7 +201,7 @@ Render: **New > Blueprint**, point it at this repo, and fill in the secrets from
 - Keys are stored as SHA-256 hashes and shown once.
 - The model can block or escalate, never approve beyond the written rules.
 - If Claude is unavailable, the rules guardian decides (fail closed, never fail open).
-- Webhooks are signature-verified with PayPal before they change state.
+- Webhooks are signature-verified with PayPal before they change state. Against real PayPal, events are refused until `PAYPAL_WEBHOOK_ID` is set; only the labelled simulator accepts unsigned test events.
 - Receipts are ES256 JWS with a published JWKS.
 
 ## Project layout
