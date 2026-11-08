@@ -9,7 +9,7 @@ import { api, useSession } from './session';
 import { Dot, IconCircle, Pill, Progress, Spinner } from './ui';
 
 const KIND = { demo: { label: 'Demo agent', icon: Bot }, mcp: { label: 'MCP', icon: Plug }, rest: { label: 'REST', icon: Terminal } } as const;
-const CHIP_TONE: Record<string, string> = { block: 'no', auto: 'ask', budget: 'blue', max: 'muted', allow: 'ok', merchant: 'muted', rate: 'muted', expiry: 'muted', note: 'muted', purpose: 'muted' };
+export const CHIP_TONE: Record<string, string> = { block: 'no', auto: 'ask', budget: 'blue', max: 'muted', allow: 'ok', merchant: 'muted', rate: 'muted', expiry: 'muted', note: 'muted', purpose: 'muted' };
 
 /** One agent and its permit, as an expandable row. */
 export function AgentRow({ p, defaultOpen = false }: { p: PermitView; defaultOpen?: boolean }) {

@@ -5,7 +5,8 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Ban, Bot, Check, Clock, Copy, Gauge, Gift, Hand, PenLine, Plane, Plug, Repeat, ShoppingBasket, Sparkles, Store, Tag, Terminal, Wallet, Wand2 } from 'lucide-react';
 import { Shell } from '@/components/Shell';
 import { api, useSession } from '@/components/session';
-import { Segmented, Spinner } from '@/components/ui';
+import { CHIP_TONE } from '@/components/PermitCard';
+import { Pill, Segmented, Spinner } from '@/components/ui';
 import { TEMPLATES, type PermitTemplate } from '@/lib/rules-text';
 import { CATEGORIES, CATEGORY_LABEL, type AgentKind, type Category, type PermitRules } from '@/lib/types';
 import type { PermitView } from '@/components/client-types';
@@ -75,6 +76,8 @@ function CopyButton({ text, label = 'Copy' }: { text: string; label?: string }) 
 }
 
 function Issued({ permit, token }: { permit: PermitView; token: string }) {
+  // The built-in agent never needs its key shown; keys are only for agents you connect yourself.
+  const builtIn = permit.agentKind === 'demo';
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const mcp = JSON.stringify({ mcpServers: { valet: { command: 'npx', args: ['-y', 'mcp-remote', `${origin}/api/mcp`, '--header', 'Authorization:${VALET_AUTH}'], env: { VALET_AUTH: `Bearer ${token}` } } } }, null, 2);
   const curl = `curl -X POST ${origin}/api/agent/pay \\
@@ -89,19 +92,32 @@ function Issued({ permit, token }: { permit: PermitView; token: string }) {
           <span className="relative grid h-14 w-14 place-items-center rounded-full bg-[#12B76A]">
             <Check className="h-7 w-7" strokeWidth={3} />
           </span>
-          <h1 className="relative mt-5 text-[30px] font-bold tracking-[-0.035em]">{permit.agentName} is ready</h1>
-          <p className="relative mt-1 text-white/70">It can now pay with PayPal inside your rules. Pause or revoke it any time.</p>
+          <h1 className="relative mt-5 text-[30px] font-bold tracking-[-0.035em]">{permit.agentName} is {builtIn ? 'connected' : 'ready'}</h1>
+          <p className="relative mt-1 text-white/70">It pays with your PayPal inside these rules. Pause or revoke it any time from Home.</p>
         </div>
         <div className="space-y-5 p-7">
-          <div>
-            <p className="text-sm font-semibold">Agent key</p>
-            <p className="text-xs text-ink-muted">Shown once. Valet stores only a hash, so a leaked database cannot be replayed.</p>
-            <div className="mt-2 flex items-center gap-2 rounded-tile bg-fill p-2 pl-4">
-              <code className="min-w-0 flex-1 truncate font-mono text-sm">{token}</code>
-              <CopyButton text={token} />
+          {builtIn ? (
+            <div>
+              <p className="text-sm font-semibold">What {permit.agentName} can do</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {permit.chips.map((c, i) => (
+                  <Pill key={i} tone={CHIP_TONE[c.kind]}>
+                    {c.label}
+                  </Pill>
+                ))}
+              </div>
             </div>
-          </div>
-          {permit.agentKind === 'demo' ? (
+          ) : (
+            <div>
+              <p className="text-sm font-semibold">Agent key</p>
+              <p className="text-xs text-ink-muted">Shown once. Valet stores only a hash, so a leaked database cannot be replayed.</p>
+              <div className="mt-2 flex items-center gap-2 rounded-tile bg-fill p-2 pl-4">
+                <code className="min-w-0 flex-1 truncate font-mono text-sm">{token}</code>
+                <CopyButton text={token} />
+              </div>
+            </div>
+          )}
+          {builtIn ? (
             <Link href={`/agent?permit=${permit.id}`} className="btn btn-primary btn-lg w-full">
               Give Scout an errand <ArrowRight className="h-4 w-4" />
             </Link>
@@ -125,7 +141,9 @@ function Issued({ permit, token }: { permit: PermitView; token: string }) {
           )}
           <div className="flex gap-2">
             <Link href="/app" className="btn btn-sm btn-secondary">Back to Home</Link>
-            <Link href="/developers" className="btn btn-sm btn-ghost">Developer docs</Link>
+            {builtIn ? null : (
+              <Link href="/developers" className="btn btn-sm btn-ghost">Developer docs</Link>
+            )}
           </div>
         </div>
       </div>
