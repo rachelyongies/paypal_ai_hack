@@ -1,7 +1,8 @@
 // Runtime configuration and mode detection. Server-only.
 
 export const config = {
-  appUrl: (process.env.APP_URL || 'http://localhost:3000').replace(/\/$/, ''),
+  // Render sets RENDER_EXTERNAL_URL on every web service, so APP_URL is only needed elsewhere.
+  appUrl: (process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || 'http://localhost:3000').replace(/\/$/, ''),
   dataDir: process.env.DATA_DIR || '.data',
   paypal: {
     clientId: process.env.PAYPAL_CLIENT_ID || '',

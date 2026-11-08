@@ -15,8 +15,6 @@ services:
         value: "1"
       - key: DATA_DIR
         value: /var/data
-      - key: APP_URL
-        sync: false
       - key: PAYPAL_CLIENT_ID
         sync: false
       - key: PAYPAL_CLIENT_SECRET
