@@ -10,11 +10,7 @@
     "start": "next start -p ${PORT:-3000}",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "smoke": "node scripts/smoke.mjs",
-    "record": "node scripts/record-demo.mjs",
-    "ad": "python3 scripts/make-music.py demo/out/valet-ad-music.wav && node scripts/render-ad.mjs",
-    "record:story": "node scripts/record-story.mjs",
-    "demo:video": "python3 scripts/make-demo-video.py"
+    "smoke": "node scripts/smoke.mjs"
   },
   "engines": {
     "node": ">=20.11"

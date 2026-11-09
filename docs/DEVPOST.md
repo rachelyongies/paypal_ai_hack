@@ -100,7 +100,7 @@ To run it locally instead, follow "Run it" in the README; with no keys it starts
 
 ## Image gallery
 
-Upload in this order, from `docs/images/` and `demo/out/`: `thumbnail.png`, `home.jpg`, `permit-chips.jpg`, `agent-ask.jpg`, `agent-blocked.jpg`, `phone-approval.jpg`, `redteam-scorecard.jpg`, `activity-detail.jpg`, `receipt-valid.jpg`, `risk-ops-query.jpg`, `growth-model.jpg`.
+Upload the YouTube thumbnail first, then these from `docs/images/` in order: `home.jpg`, `permit-chips.jpg`, `agent-ask.jpg`, `agent-blocked.jpg`, `phone-approval.jpg`, `redteam-scorecard.jpg`, `activity-detail.jpg`, `receipt-valid.jpg`, `risk-ops-query.jpg`, `growth-model.jpg`.
 
 ## Sponsor prizes to opt into
 

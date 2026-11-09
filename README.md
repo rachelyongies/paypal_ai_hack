@@ -184,10 +184,6 @@ npm run smoke
 
 Render: **New > Blueprint**, point it at this repo, and fill in the secrets from `render.yaml`: `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `DEMO_VAULT_ID`, `ANTHROPIC_API_KEY`, and optionally `NEXT_PUBLIC_AG_GRID_LICENSE_KEY`. The public URL comes from Render automatically. After the first deploy, register `https://<host>/api/webhooks/paypal` in your PayPal app for `PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.REFUNDED`, `PAYMENT.CAPTURE.REVERSED`, `CUSTOMER.DISPUTE.CREATED`, `CUSTOMER.DISPUTE.UPDATED` and `VAULT.PAYMENT-TOKEN.DELETED`, then set `PAYPAL_WEBHOOK_ID`; until then Valet refuses webhook events. The blueprint uses Render's free plan: the service sleeps after about 15 idle minutes, takes up to a minute to wake, and starts with fresh demo data after each restart. For an always-on service that keeps data, switch to `plan: starter` and enable the disk noted in `render.yaml`. Any Node 20+ host works with `npm run build` and `npm start`.
 
-## Demo assets
-
-`npm run record` drives the real app in Chromium and saves feature clips and 2x screenshots to `demo/out/`. `npm run ad` renders the 60 second ad (1080p, 60 fps) from `demo/ad/ad.html` with an original synthesized soundtrack, plus the YouTube thumbnail from `demo/ad/thumbnail.html`. The YouTube script is in [`demo/SCRIPT.md`](demo/SCRIPT.md).
-
 ## Limitations
 
 - Sandbox only. No live PayPal money moves, and the app never asks for real PayPal credentials.
@@ -225,4 +221,4 @@ PayPal (Vault v3, Orders v2, Payments, Webhooks, JS SDK v6, Agent Toolkit), Clau
 
 Valet's code is MIT. See [LICENSE](LICENSE).
 
-Dependencies keep their own licenses: MIT, ISC, Apache-2.0 and OFL-1.1 (the Inter font), except AG Grid Enterprise, which is commercial. It runs in trial mode without a key; set `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` with a key from AG Grid, a hackathon sponsor. The soundtrack in the demo assets is synthesized from scratch by `scripts/make-music.py`, and every screenshot is of Valet itself.
+Dependencies keep their own licenses: MIT, ISC, Apache-2.0 and OFL-1.1 (the Inter font), except AG Grid Enterprise, which is commercial. It runs in trial mode without a key; set `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` with a key from AG Grid, a hackathon sponsor. The demo video's soundtrack was synthesized from scratch, and every screenshot is of Valet itself.
