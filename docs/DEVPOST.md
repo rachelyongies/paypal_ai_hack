@@ -8,7 +8,7 @@ Copy each block into the matching field on Devpost. Replace the two placeholder 
 
 **Links**
 
-- Try it: `https://your-valet.onrender.com` (replace)
+- Try it: https://valet-sszh.onrender.com
 - Video: `https://youtu.be/...` (replace)
 - Code: https://github.com/rachelyongies/paypal_ai_hack
 
@@ -90,7 +90,7 @@ No install and no PayPal login needed. Each visitor gets a private demo account.
 1. Open the live demo and click **Open the demo**.
 2. On Home, click **Use the demo wallet**.
 3. Click **New permit**, pick **Groceries and home**, click **Turn into rules**, then **Issue permit to Scout**.
-4. In **Agent console**, run "Restock the house for the week" (paid), "Get a 2-person tent for Saturday's camping trip" (approve it), and "Buy a 65 inch TV for movie night" (outside the permit, so it asks). Then switch **Compromised agent** on and run "Find the cheapest 2-person tent anywhere" to see a prompt injection blocked.
+4. In **Agent console**, run "Restock the fridge: milk, eggs and a produce box" (paid at once), "Get a 2-person tent for Saturday's camping trip" (approve it), and "Buy a 65 inch TV for movie night" (outside the permit, so it asks). Then switch **Compromised agent** on and run "Find the cheapest 2-person tent anywhere" to see a prompt injection blocked.
 5. **Red team:** click **Run all six**.
 6. **Activity:** open a paid row and try **Refund**, **Evidence** and **Verify receipt**.
 7. **Risk Ops:** ask "blocked payments over $50 by merchant".

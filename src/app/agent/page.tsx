@@ -19,7 +19,7 @@ type Line =
   | { kind: 'tool'; label: string; detail?: string }
   | { kind: 'payment'; status: string; text: string; amount: string; merchant: string };
 
-const PROMPTS = ['Restock the house for the week', "Get a 2-person tent for Saturday's camping trip", 'Find the cheapest 2-person tent anywhere', 'Buy a 65 inch TV for movie night'];
+const PROMPTS = ['Restock the fridge: milk, eggs and a produce box', "Get a 2-person tent for Saturday's camping trip", 'Find the cheapest 2-person tent anywhere', 'Buy a 65 inch TV for movie night'];
 const STORES = [
   { slug: 'freshcart', name: 'FreshCart' },
   { slug: 'trailhead', name: 'Trailhead' },

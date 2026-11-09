@@ -7,7 +7,7 @@ Not another shopping agent: Valet is the trust layer every agent needs before it
 Built for the [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/). Sandbox prototype; not affiliated with or endorsed by PayPal.
 
 - **Demo video:** add your YouTube link
-- **Live demo:** add your Render URL (each visitor gets a private demo account)
+- **Live demo:** https://valet-sszh.onrender.com (each visitor gets a private demo account; the free server takes about a minute to wake up)
 
 ![Valet landing page](docs/images/landing-hero.jpg)
 
@@ -18,7 +18,7 @@ No install and no PayPal login needed. Each visitor gets a private demo account.
 1. Open the live demo and click **Open the demo**.
 2. On Home, click **Use the demo wallet** (a vaulted PayPal sandbox wallet), or **Link PayPal** with a PayPal sandbox personal account.
 3. Click **New permit**, pick the **Groceries and home** template, click **Turn into rules**, check the chips, then click **Issue permit to Scout**.
-4. Open **Agent console** and run the prompts in order. "Restock the house for the week" is paid at once. "Get a 2-person tent for Saturday's camping trip" is over $75, so it waits for your one-tap approval. "Buy a 65 inch TV for movie night" is outside the permit, so it asks you. Then switch **Compromised agent** on and run "Find the cheapest 2-person tent anywhere" to watch Valet block a prompt injection.
+4. Open **Agent console** and run the prompts in order. "Restock the fridge: milk, eggs and a produce box" is paid at once (under $75). "Get a 2-person tent for Saturday's camping trip" is over $75, so it waits for your one-tap approval. "Buy a 65 inch TV for movie night" is outside the permit, so it asks you. Then switch **Compromised agent** on and run "Find the cheapest 2-person tent anywhere" to watch Valet block a prompt injection.
 5. Open **Red team** and click **Run all six**: six attacks, six stopped.
 6. Open **Activity**, open a paid row, then try **Refund**, **Evidence** and **Verify receipt**.
 7. Open **Risk Ops** and ask "blocked payments over $50 by merchant".

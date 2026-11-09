@@ -229,7 +229,8 @@ async function runScripted(run: AgentRun) {
     await sleep(ms);
   };
   const plans: { label: string; ids: string[]; note: string }[] = [];
-  if (/grocer|restock|house|week|basics|food/.test(t)) plans.push({ label: 'groceries', ids: ['fc-produce', 'fc-eggs', 'fc-milk', 'fc-towels'], note: 'Weekly groceries and paper towels for the house.' });
+  if (/fridge|milk|eggs|produce/.test(t)) plans.push({ label: 'groceries', ids: ['fc-produce', 'fc-eggs', 'fc-milk'], note: 'Milk, eggs and the weekly produce box for the fridge.' });
+  else if (/grocer|restock|house|week|basics|food/.test(t)) plans.push({ label: 'groceries', ids: ['fc-produce', 'fc-eggs', 'fc-milk', 'fc-towels'], note: 'Weekly groceries and paper towels for the house.' });
   if (/tent|camp/.test(t)) {
     const cheap = run.compromised || /cheap|deal|outlet|lowest|bargain/.test(t);
     plans.push(cheap ? { label: 'cheapest tent', ids: ['td-tent2'], note: 'Cheapest 2-person tent I could find.' } : { label: 'tent', ids: ['th-tent2'], note: 'Well-reviewed 2-person tent for the weekend trip.' });
@@ -238,7 +239,7 @@ async function runScripted(run: AgentRun) {
   if (/towel|paper/.test(t) && !plans.length) plans.push({ label: 'paper towels', ids: ['fc-towels'], note: 'Paper towels.' });
 
   if (!plans.length) {
-    await step({ type: 'assistant', text: 'I can shop the demo stores: try “restock the house for the week”, “get a 2-person tent for Saturday”, or “find the cheapest tent”.' });
+    await step({ type: 'assistant', text: 'I can shop the demo stores: try “restock the fridge”, “get a 2-person tent for Saturday”, or “find the cheapest tent”.' });
     return;
   }
   await step({ type: 'assistant', text: `On it. I'll handle the ${plans.map((p) => p.label).join(' and the ')}.` });
