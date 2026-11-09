@@ -48,7 +48,7 @@ For PayPal, a Risk Ops console on AG Grid shows every agent payment labelled wit
 - **AG Grid Enterprise:** the activity ledger with master detail decision traces, and Risk Ops, where the AI Toolkit turns plain English into grid state.
 - **Agents:** a REST Agent Pay API and a Streamable HTTP MCP server, with a Postman collection.
 - **App:** Next.js 15, React 19, TypeScript, Tailwind CSS, jose for signed receipts, and a Render blueprint for hosting.
-- **Process:** built during the hackathon with Claude Code as an AI pair programmer, verified by 19 unit tests and 38 end-to-end checks.
+- **Process:** built during the hackathon with Claude Code as an AI pair programmer, verified by 22 unit tests and 38 end-to-end checks.
 
 ## Challenges we ran into
 
@@ -104,4 +104,4 @@ Upload in this order, from `docs/images/` and `demo/out/`: `thumbnail.png`, `hom
 
 ## Sponsor prizes to opt into
 
-AG Grid: AG Grid Enterprise and its AI Toolkit power the activity ledger and Risk Ops. Render: only if the live demo is hosted there.
+AG Grid: AG Grid Enterprise and its AI Toolkit power the activity ledger and Risk Ops. Render: the live demo runs on Render (https://valet-sszh.onrender.com).
