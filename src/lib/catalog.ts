@@ -78,11 +78,6 @@ export function store(slug: string) {
   return STORES.find((s) => s.slug === slug);
 }
 
-export function storeByDomain(domain: string) {
-  const d = domain.toLowerCase().replace(/^www\./, '');
-  return STORES.find((s) => s.domain === d);
-}
-
 export function product(id: string) {
   return PRODUCTS.find((p) => p.id === id);
 }

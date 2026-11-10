@@ -98,4 +98,3 @@ export async function verifyReceipt(token: string): Promise<{ valid: true; claim
   }
 }
 
-export const receiptMeta = { kid: KID, typ: TYP, issuer: ISSUER, jwksPath: '/.well-known/jwks.json', appUrl: config.appUrl };

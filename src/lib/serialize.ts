@@ -18,10 +18,6 @@ export function permitView(p: Permit, spent?: number) {
   return { ...rest, chips: ruleChips(p.rules), spent };
 }
 
-export function requestView(r: PaymentRequest) {
-  return r;
-}
-
 export function opsView(r: PaymentRequest) {
   const { approval, receipt: _receipt, ownerId, ...rest } = r;
   return {
