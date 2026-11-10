@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Valet: a valet key for AI agents to pay with PayPal. PayPal AI Hackathon 2026.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",

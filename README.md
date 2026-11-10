@@ -219,6 +219,6 @@ PayPal (Vault v3, Orders v2, Payments, Webhooks, JS SDK v6, Agent Toolkit), Clau
 
 ## License
 
-Valet's code is MIT. See [LICENSE](LICENSE).
+All rights reserved. The code is shared so the PayPal AI Hackathon 2026 judges can review and test it; see [LICENSE](LICENSE).
 
 Dependencies keep their own licenses: MIT, ISC, Apache-2.0 and OFL-1.1 (the Inter font), except AG Grid Enterprise, which is commercial. It runs in trial mode without a key; set `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` with a key from AG Grid, a hackathon sponsor. The demo video's soundtrack was synthesized from scratch, and every screenshot is of Valet itself.
