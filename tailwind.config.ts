@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
-// Sleek fintech system: PayPal's blues on a soft gray canvas, white cards,
-// big type, round controls. Brand tokens from paypal.com's 2026 theme.
+// PayPal's blues on a soft gray canvas, white cards, big type and round
+// controls. Brand tokens from paypal.com's 2026 theme.
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {

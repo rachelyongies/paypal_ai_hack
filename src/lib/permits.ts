@@ -165,7 +165,7 @@ export function compileRulesOffline(sentence: string): PermitRules {
 
   const names = [...allowed].slice(0, 2).map((c) => c.replace('_', ' '));
   const purpose = names.length ? `${names.join(' and ')} purchases`.replace(/^./, (ch) => ch.toUpperCase()) : 'Agent purchases';
-  if (!budget) notes.push('No weekly cap given; per-purchase approval applies');
+  if (!budget) notes.push('No spending cap given');
 
   return normalizeRules({
     purpose,

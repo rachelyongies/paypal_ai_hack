@@ -107,7 +107,7 @@ export function ApprovalCard({ r, showQr = true, via = 'web', onDone }: { r: Pay
   );
 }
 
-/** A Revolut-style transaction row: avatar, what and where, amount and state. */
+/** One payment in a list: merchant, items, amount and status. */
 export function ActivityRow({ r, onClick }: { r: PaymentRequest; onClick?: () => void }) {
   const s = STATUS[r.status];
   const stopped = r.status === 'blocked' || r.status === 'declined' || r.status === 'expired' || r.status === 'failed';

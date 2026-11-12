@@ -52,8 +52,8 @@ async function toolPay(run: AgentRun, items: { product_id: string; quantity: num
   const stores = new Set(resolved.map((r) => r.p!.store));
   if (stores.size > 1) return { error: 'One store per request_payment call. Split the cart by store.' };
   const st = store([...stores][0])!;
-  // Valet's agent SDK attaches what the agent saw on this store's pages, so
-  // the guardian can read it for manipulation.
+  // Send the text of the store pages Scout read, as REST and MCP clients do
+  // with page_excerpt, so the guardian can check it for manipulation.
   const seen = [...viewed].map((id) => product(id)!).filter((p) => p.store === st.slug);
   const pages = Array.from(new Set([...seen, ...resolved.map((r) => r.p!)])).map(pageText);
   const req = await submitPayment(run.permit, {
