@@ -103,7 +103,7 @@ test('detects lookalike merchants', () => {
   assert.equal(lookalikeOf({ name: 'Trai1head', domain: 'trai1headoutfitters.test' }, []), 'trailheadoutfitters.example');
   assert.equal(lookalikeOf({ name: 'TrailDeals', domain: 'trai1headoutfitters-deals.example' }, []), 'trailheadoutfitters.example');
   assert.equal(lookalikeOf({ name: 'FreshCart', domain: 'freshcart.example' }, []), null);
-  assert.equal(lookalikeOf({ name: 'Bookshop', domain: 'bookshop.org' }, []), null);
+  assert.equal(lookalikeOf({ name: 'Paperleaf Books', domain: 'paperleaf-books.test' }, []), null);
 });
 
 test('blocks a burst beyond the hourly limit', () => {
