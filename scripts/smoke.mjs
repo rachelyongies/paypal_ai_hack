@@ -166,7 +166,14 @@ async function main() {
   console.log('Webhooks');
   const capture = act.body.requests?.find((r) => r.id === tent.body.request_id)?.paypal?.captureId;
   const wh = await call('/api/webhooks/paypal', { json: { id: 'WH-SMOKE', event_type: 'PAYMENT.CAPTURE.REFUNDED', resource: { id: 'REF-SMOKE', amount: { value: '10.00' }, links: [{ rel: 'up', href: `https://api-m.sandbox.paypal.com/v2/payments/captures/${capture}` }] } } });
-  check('webhook accepted', wh.status === 200 || wh.status === 401, String(wh.status));
+  if (s0.body.status?.paypalMode === 'sandbox') {
+    // Against real PayPal, unsigned events must be refused.
+    check('unsigned webhook refused', wh.status === 401, String(wh.status));
+  } else {
+    const after = await call('/api/activity');
+    const refunded = after.body.requests?.find((r) => r.id === tent.body.request_id);
+    check('simulated refund webhook recorded', wh.status === 200 && /refund/.test(refunded?.status ?? ''), `${wh.status} ${refunded?.status}`);
+  }
 
   console.log(`\n${failures ? `${failures} check(s) failed` : 'All checks passed'}`);
   process.exit(failures ? 1 : 0);
