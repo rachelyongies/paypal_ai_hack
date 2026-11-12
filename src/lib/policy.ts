@@ -23,6 +23,18 @@ export interface PolicyResult {
 const PERIOD_MS = { day: 864e5, week: 7 * 864e5, month: 30 * 864e5 } as const;
 const PERIOD_WORD = { day: 'today', week: 'this week', month: 'this month' } as const;
 const COUNTS_AS_SPEND = new Set(['paid', 'executing', 'partially_refunded']);
+
+/**
+ * What a permit has spent, net of refunds: within the budget's period when it
+ * has one, otherwise in total. Every screen and API that shows spend uses this,
+ * so it always matches what the budget check counts.
+ */
+export function spentOn(history: PaymentRequest[], budget: Permit['rules']['budget'], now = Date.now()): number {
+  const windowMs = budget ? PERIOD_MS[budget.period] : Infinity;
+  return round2(
+    history.filter((h) => COUNTS_AS_SPEND.has(h.status) && now - Date.parse(h.createdAt) < windowMs).reduce((s, h) => s + h.amount - (h.paypal?.refundedAmount ?? 0), 0),
+  );
+}
 const COUNTS_AS_ATTEMPT = new Set(['paid', 'executing', 'pending_approval', 'partially_refunded']);
 
 const severity: Record<PolicyCheck['result'], number> = { pass: 0, info: 0, ask: 1, block: 2 };
@@ -126,10 +138,7 @@ export function evaluatePolicy(input: PolicyInput): PolicyResult {
   // 7. Budget for the period.
   let spentInPeriod = 0;
   if (r.budget) {
-    const windowMs = PERIOD_MS[r.budget.period];
-    spentInPeriod = round2(
-      history.filter((h) => COUNTS_AS_SPEND.has(h.status) && now - Date.parse(h.createdAt) < windowMs).reduce((s, h) => s + h.amount - (h.paypal?.refundedAmount ?? 0), 0),
-    );
+    spentInPeriod = spentOn(history, r.budget, now);
     const after = round2(spentInPeriod + amount);
     if (after > r.budget.amount) {
       add({ id: 'budget', label: 'Budget', result: 'ask', detail: `This would make ${money(after)} ${PERIOD_WORD[r.budget.period]}, over your ${money(r.budget.amount)} limit.` });

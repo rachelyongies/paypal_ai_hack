@@ -3,6 +3,7 @@
 import { product, searchProducts, store } from './catalog';
 import { getRequest, requestsForPermit } from './db';
 import { expireIfStale, submitPayment, toAgentResponse } from './decide';
+import { spentOn } from './policy';
 import { ruleChips } from './rules-text';
 import { CATEGORIES, type Category, type Permit, type RequestItem } from './types';
 import { money } from './util';
@@ -80,14 +81,13 @@ function text(obj: unknown, isError = false) {
 export async function callTool(permit: Permit, name: string, args: Record<string, unknown>) {
   switch (name) {
     case 'valet_get_permit': {
-      const paid = requestsForPermit(permit.id).filter((r) => r.status === 'paid');
       return text({
         agent: permit.agentName,
         status: permit.status,
         purpose: permit.rules.purpose,
         owner_words: permit.sentence,
         rules: ruleChips(permit.rules).map((c) => c.label),
-        spent_so_far: money(paid.reduce((s, r) => s + r.amount, 0)),
+        spent_so_far: money(spentOn(requestsForPermit(permit.id), permit.rules.budget)),
       });
     }
     case 'valet_search_products': {

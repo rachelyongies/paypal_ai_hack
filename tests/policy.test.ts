@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluatePolicy, lookalikeOf, strictest } from '../src/lib/policy';
+import { evaluatePolicy, lookalikeOf, spentOn, strictest } from '../src/lib/policy';
 import { compileRulesOffline, normalizeRules } from '../src/lib/permits';
 import { rulesGuardian } from '../src/lib/guardian';
 import { INJECTION_TEXT } from '../src/lib/catalog';
@@ -176,4 +176,13 @@ test('guardian escalates off-task items', () => {
   const r = g({ items: [item({ name: '65 in OLED TV', sku: 'vb-tv65', category: 'electronics', unitPrice: 899 })], amount: 899, merchant: { name: 'VoltBay', domain: 'voltbay.example' } });
   assert.equal(r.verdict, 'escalate');
   assert.ok(r.signals.includes('task_mismatch'));
+});
+
+test('spend is net of refunds and counted within the budget period', () => {
+  const now = Date.parse('2026-11-10T12:00:00Z');
+  const past = (amount: number, status: string, daysAgo: number, refunded = 0) =>
+    ({ amount, status, createdAt: new Date(now - daysAgo * 864e5).toISOString(), paypal: refunded ? { refundedAmount: refunded } : undefined }) as unknown as PaymentRequest;
+  const history = [past(50, 'paid', 1), past(40, 'partially_refunded', 2, 10), past(30, 'paid', 9), past(99, 'blocked', 1)];
+  assert.equal(spentOn(history, { amount: 250, period: 'week' }, now), 80);
+  assert.equal(spentOn(history, null, now), 110);
 });

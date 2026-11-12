@@ -6,6 +6,7 @@ import { claudeClient, FALLBACK, MODEL } from './claude';
 import { aiMode } from './config';
 import { getRequest, requestsForPermit } from './db';
 import { expireIfStale, submitPayment, toAgentResponse, type AgentPayResponse } from './decide';
+import { spentOn } from './policy';
 import { ruleChips } from './rules-text';
 import type { Permit } from './types';
 import { money, sleep } from './util';
@@ -27,9 +28,7 @@ export interface AgentRun {
 }
 
 function permitSummary(p: Permit) {
-  const spent = requestsForPermit(p.id)
-    .filter((r) => r.status === 'paid')
-    .reduce((s, r) => s + r.amount, 0);
+  const spent = spentOn(requestsForPermit(p.id), p.rules.budget);
   return {
     agent: p.agentName,
     purpose: p.rules.purpose,

@@ -1,6 +1,7 @@
 import { requestsForPermit } from '@/lib/db';
 import { handle, json } from '@/lib/http';
 import { bearer, permitFromToken } from '@/lib/permits';
+import { spentOn } from '@/lib/policy';
 import { ruleChips } from '@/lib/rules-text';
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export const GET = handle(async (req: Request) => {
   const permit = permitFromToken(bearer(req));
   if (!permit) return json({ error: 'invalid_permit' }, 401);
-  const spent = requestsForPermit(permit.id).filter((r) => r.status === 'paid').reduce((s, r) => s + r.amount, 0);
+  const spent = spentOn(requestsForPermit(permit.id), permit.rules.budget);
   return json({
     agent: permit.agentName,
     status: permit.status,

@@ -177,7 +177,7 @@ npm test
 npm run smoke
 ```
 
-`npm test` runs 22 unit tests on the policy engine, compiler, guardian and Risk Ops query handling. `npm run smoke` runs 38 end-to-end checks over HTTP against a running server (`BASE_URL`), including all six red team attacks. Run it in simulator mode, or in sandbox mode with `DEMO_VAULT_ID` set so the demo wallet can link.
+`npm test` runs 23 unit tests on the policy engine, compiler, guardian and Risk Ops query handling. `npm run smoke` runs 38 end-to-end checks over HTTP against a running server (`BASE_URL`), including all six red team attacks. Run it in simulator mode, or in sandbox mode with `DEMO_VAULT_ID` set so the demo wallet can link.
 
 ## Deploy
 
