@@ -95,6 +95,8 @@ export async function callTool(permit: Permit, name: string, args: Record<string
       return text(searchProducts(q).map((p) => ({ product_id: p.id, name: p.name, price: p.price, category: p.category, store: store(p.store)!.name, domain: store(p.store)!.domain })));
     }
     case 'valet_request_payment': {
+      const task = String(args.task ?? '').trim().slice(0, 600);
+      if (!task) return text({ error: 'task is required: what did the owner ask for, in their words?' }, true);
       const rawItems = Array.isArray(args.items) ? (args.items as Record<string, unknown>[]) : [];
       if (!rawItems.length) return text({ error: 'items is required' }, true);
       const items: RequestItem[] = [];
@@ -121,7 +123,7 @@ export async function callTool(permit: Permit, name: string, args: Record<string
       const r = await submitPayment(permit, {
         merchant,
         items,
-        task: String(args.task ?? '').slice(0, 600) || 'No task given',
+        task,
         agentNote: typeof args.note === 'string' ? args.note : undefined,
         context: pages.join('\n') || undefined,
         source: 'mcp',
