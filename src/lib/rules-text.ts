@@ -29,7 +29,6 @@ export function ruleChips(r: PermitRules): RuleChip[] {
 
 export const EXAMPLE_SENTENCES = [
   'Weekly house shopping: groceries, household supplies and outdoor gear, up to $250 a week. Ask me for anything over $75. Never gift cards or crypto.',
-  'Groceries only, up to $150 a week, from FreshCart. Ask me above $60.',
   'Book my work travel up to $1,200 a month. Always ask me before paying. Never more than $600 at once.',
 ];
 
@@ -44,7 +43,7 @@ export interface PermitTemplate {
 /** Ready-made permits: one tap fills a sentence the owner can still edit. */
 export const TEMPLATES: PermitTemplate[] = [
   { id: 'home', label: 'Groceries and home', blurb: 'Weekly restocks', icon: 'basket', sentence: EXAMPLE_SENTENCES[0] },
-  { id: 'travel', label: 'Work travel', blurb: 'Flights and hotels', icon: 'plane', sentence: EXAMPLE_SENTENCES[2] },
+  { id: 'travel', label: 'Work travel', blurb: 'Flights and hotels', icon: 'plane', sentence: EXAMPLE_SENTENCES[1] },
   {
     id: 'subs',
     label: 'Subscriptions',

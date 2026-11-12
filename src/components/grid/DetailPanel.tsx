@@ -4,11 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Download, FileCheck2, Undo2 } from 'lucide-react';
 import type { PaymentRequest } from '@/lib/types';
-import { money } from '../format';
 import { ChecksList, ItemsList, TimelineList } from '../RequestCards';
 import { api } from '../session';
 import { Pill, Spinner } from '../ui';
-import { SIGNAL_LABEL } from '../format';
+import { money, SIGNAL_LABEL } from '../format';
 
 export function DetailPanel({ r, owner = false }: { r: PaymentRequest; owner?: boolean }) {
   const [busy, setBusy] = useState(false);

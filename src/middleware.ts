@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { OWNER_COOKIE } from '@/lib/cookies';
 
 // Every browser gets an anonymous owner id, so each judge gets their own
 // Valet account without signing up. The id is an unguessable bearer secret.
-export const OWNER_COOKIE = 'valet_owner';
 
 export function middleware(req: NextRequest) {
   if (req.cookies.get(OWNER_COOKIE)?.value) return NextResponse.next();

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Bell, Bot, Check, ChevronRight, Plus, ReceiptText, RotateCcw, ShieldAlert, Snowflake, TrendingUp, Unlink } from 'lucide-react';
 import { Shell } from '@/components/Shell';
 import { PayPalLink } from '@/components/PayPalLink';
-import { AgentRow } from '@/components/PermitCard';
+import { AgentRow } from '@/components/AgentRow';
 import { Concierge } from '@/components/Concierge';
 import { ActivityRow, ApprovalCard } from '@/components/RequestCards';
 import { api, useSession } from '@/components/session';

@@ -12,13 +12,6 @@ export function sha256(input: string) {
   return crypto.createHash('sha256').update(input).digest('hex');
 }
 
-/** Constant-time comparison of two hex digests. */
-export function safeEqualHex(a: string, b: string) {
-  const ab = Buffer.from(a, 'hex');
-  const bb = Buffer.from(b, 'hex');
-  return ab.length === bb.length && crypto.timingSafeEqual(ab, bb);
-}
-
 export function round2(n: number) {
   return Math.round(n * 100) / 100;
 }

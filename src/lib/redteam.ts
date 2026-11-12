@@ -1,6 +1,6 @@
 // Six attacks fired at a live permit. Each one is a real request through the
 // same decision engine agents use, so the ledger and Risk Ops see them too.
-import { INJECTION_TEXT, pageText, product } from './catalog';
+import { pageText, product } from './catalog';
 import { permitsFor, savePermit } from './db';
 import { submitPayment, type PayInput } from './decide';
 import { publish } from './events';
@@ -196,4 +196,3 @@ export async function runScenario(owner: Owner, scenarioId: string): Promise<Sce
   return { scenario: scenarioId, stopped, outcome, requests };
 }
 
-export { INJECTION_TEXT };

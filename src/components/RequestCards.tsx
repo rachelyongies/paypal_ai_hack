@@ -92,7 +92,6 @@ export function ApprovalCard({ r, showQr = true, via = 'web', onDone }: { r: Pay
       </div>
       {qr && link ? (
         <div className="flex items-center gap-4 border-t border-pp-line px-5 py-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={`/api/qr?d=${encodeURIComponent(link)}`} alt="QR code that opens this approval on a phone" className="h-28 w-28 rounded-xl bg-white p-1 ring-1 ring-pp-line" />
           <p className="text-sm text-ink-muted">
             Scan with your phone to approve, the way a PayPal app notification would open it.{' '}
@@ -131,7 +130,7 @@ export function ActivityRow({ r, onClick }: { r: PaymentRequest; onClick?: () =>
   );
 }
 
-export function DecisionCard({ r }: { r: PaymentRequest; compact?: boolean }) {
+export function DecisionCard({ r }: { r: PaymentRequest }) {
   const accent = r.status === 'blocked' || r.status === 'failed' ? 'before:bg-no' : r.status === 'paid' ? 'before:bg-[#12B76A]' : r.status === 'pending_approval' ? 'before:bg-[#F59E0B]' : 'before:bg-ink-soft';
   return (
     <div className={`card animate-rise relative overflow-hidden p-4 pl-5 before:absolute before:inset-y-0 before:left-0 before:w-1 ${accent}`}>

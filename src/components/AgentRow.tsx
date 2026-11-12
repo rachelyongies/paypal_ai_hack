@@ -99,4 +99,3 @@ export function AgentRow({ p, defaultOpen = false }: { p: PermitView; defaultOpe
   );
 }
 
-export const PermitCard = AgentRow;

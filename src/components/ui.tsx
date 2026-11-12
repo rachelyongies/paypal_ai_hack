@@ -45,7 +45,7 @@ export function LogoMark({ size = 32 }: { size?: number }) {
   );
 }
 
-export function Logo({ href = '/', tag = true }: { size?: 'sm' | 'md'; href?: string; tag?: boolean }) {
+export function Logo({ href = '/', tag = true }: { href?: string; tag?: boolean }) {
   return (
     <Link href={href} className="inline-flex items-center gap-2.5" aria-label="Valet home">
       <LogoMark />

@@ -1,8 +1,7 @@
 import { cookies } from 'next/headers';
 import { getOwner, saveOwner } from './db';
+import { OWNER_COOKIE } from './cookies';
 import type { Owner } from './types';
-
-const OWNER_COOKIE = 'valet_owner';
 
 export async function ownerIdFromCookie(): Promise<string | null> {
   const store = await cookies();

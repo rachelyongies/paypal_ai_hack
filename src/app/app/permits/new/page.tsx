@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Ban, Bot, Check, Clock, Copy, Gauge, Gift, Hand, PenLine, Plane, Plug, Repeat, ShoppingBasket, Sparkles, Store, Tag, Terminal, Wallet, Wand2 } from 'lucide-react';
 import { Shell } from '@/components/Shell';
 import { api, useSession } from '@/components/session';
-import { CHIP_TONE } from '@/components/PermitCard';
+import { CHIP_TONE } from '@/components/AgentRow';
 import { Pill, Segmented, Spinner } from '@/components/ui';
 import { TEMPLATES, type PermitTemplate } from '@/lib/rules-text';
 import { CATEGORIES, CATEGORY_LABEL, type AgentKind, type Category, type PermitRules } from '@/lib/types';

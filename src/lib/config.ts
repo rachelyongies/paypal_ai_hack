@@ -10,7 +10,6 @@ export const config = {
     webhookId: process.env.PAYPAL_WEBHOOK_ID || '',
     demoVaultId: process.env.DEMO_VAULT_ID || '',
     apiBase: 'https://api-m.sandbox.paypal.com',
-    sdkUrl: 'https://www.sandbox.paypal.com/web-sdk/v6/core',
   },
   ai: {
     hasKey: Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN),

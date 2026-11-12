@@ -1,4 +1,4 @@
-import type { PaymentRequest, Permit, PermitRules } from '@/lib/types';
+import type { PaymentRequest, Permit } from '@/lib/types';
 import type { RuleChip } from '@/lib/rules-text';
 
 export type PermitView = Omit<Permit, 'tokenHash'> & { chips: RuleChip[]; spent?: number };
@@ -31,4 +31,3 @@ export type OpsRequest = Omit<PaymentRequest, 'approval' | 'receipt' | 'ownerId'
   approval?: { requestedAt: string; decidedAt?: string; decision?: string; via?: string; expiresAt: string };
 };
 
-export type { PaymentRequest, PermitRules };
