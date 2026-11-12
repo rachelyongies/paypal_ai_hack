@@ -214,9 +214,8 @@ export function permitFromToken(token: string | null | undefined): Permit | unde
   return permitByTokenHash(sha256(token));
 }
 
+/** The agent's permit key from the Authorization header. Never from the URL, where it would end up in logs. */
 export function bearer(req: Request): string | null {
   const h = req.headers.get('authorization');
-  if (h?.toLowerCase().startsWith('bearer ')) return h.slice(7).trim();
-  const url = new URL(req.url);
-  return url.searchParams.get('token');
+  return h?.toLowerCase().startsWith('bearer ') ? h.slice(7).trim() : null;
 }
