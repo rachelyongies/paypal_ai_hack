@@ -30,7 +30,7 @@ No install and no PayPal login needed. Each visitor gets a private demo account.
 | PayPal sandbox | Real PayPal sandbox calls: Vault v3, Orders v2, Refunds and webhooks |
 | PayPal simulator | No PayPal keys are set; a clearly labelled simulator with the same API shapes |
 | Claude guardian | Claude Opus 5.5 compiles permits and checks the intent of every payment |
-| Rules guardian | No Anthropic key is set; a deterministic fallback that fails closed |
+| Rules guardian | No Anthropic key is set; deterministic checks stand in for Claude |
 
 ## Why
 
@@ -81,7 +81,7 @@ A calm, card-based money app. Each screen has one primary action, amounts come f
 | Link PayPal with the JS SDK v6 vault flow, or a one-click sandbox demo wallet | `/app` |
 | Plain-English permits compiled by Claude, editable before issuing | `/app/permits/new` |
 | Policy engine: amount integrity, never-lists, caps, burst limit, scope, lookalike merchants, budget, duplicates, approval threshold | `src/lib/policy.ts` |
-| AI guardian (Claude Opus 5.5, structured output) with a deterministic fallback that fails closed | `src/lib/guardian.ts` |
+| AI guardian (Claude Opus 5.5, structured output) with a deterministic fallback | `src/lib/guardian.ts` |
 | One-tap approvals with a QR code for the phone | `/app`, `/approve/[id]` |
 | Instant override: pause, revoke, freeze all agent payments, unlink PayPal | sidebar switch, Home, permit cards |
 | Activity ledger on AG Grid with master detail decision traces, refunds and evidence | `/app/activity` |
@@ -186,6 +186,7 @@ Render: **New > Blueprint**, point it at this repo, and fill in the secrets from
 ## Limitations
 
 - Sandbox only. No live PayPal money moves, and the app never asks for real PayPal credentials.
+- In the sandbox, payments go to Valet's own sandbox app account. In production, each merchant would be the payee.
 - Data lives in a JSON file (`DATA_DIR`), which suits a demo; production would use a database.
 - Demo accounts are anonymous browser sessions, with no sign-up.
 - The stores, products and the persona "Maya" are fictional. Demo stores use reserved `.example` domains, so no real business is depicted.
@@ -197,7 +198,7 @@ Render: **New > Blueprint**, point it at this repo, and fill in the secrets from
 - Agents hold scoped Valet keys only; the PayPal payment token never leaves the server.
 - Keys are stored as SHA-256 hashes and shown once.
 - The model can block or escalate, never approve beyond the written rules.
-- If Claude is unavailable, the rules guardian decides (fail closed, never fail open).
+- If Claude is unavailable, deterministic checks stand in for it. Either way, nothing is approved beyond the written rules.
 - Webhooks are signature-verified with PayPal before they change state. Against real PayPal, events are refused until `PAYPAL_WEBHOOK_ID` is set; only the labelled simulator accepts unsigned test events.
 - Receipts are ES256 JWS with a published JWKS.
 
