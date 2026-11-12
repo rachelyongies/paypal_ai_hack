@@ -1,6 +1,5 @@
 *.log
 *.tsbuildinfo
-.data
 .data*
 .env
 .env.local
@@ -8,4 +7,3 @@
 demo/out/
 next-env.d.ts
 node_modules
-tsconfig.tsbuildinfo
