@@ -6,7 +6,6 @@ Not another shopping agent: Valet is the trust layer every agent needs before it
 
 Built for the [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/). Sandbox prototype; not affiliated with or endorsed by PayPal.
 
-- **Demo video:** add your YouTube link
 - **Live demo:** https://valet-sszh.onrender.com (each visitor gets a private demo account; the free server takes about a minute to wake up)
 
 ![Valet landing page](docs/images/landing-hero.jpg)
@@ -17,7 +16,7 @@ No install and no PayPal login needed. Each visitor gets a private demo account.
 
 1. Open the live demo and click **Open the demo**.
 2. On Home, click **Use the demo wallet** (a vaulted PayPal sandbox wallet), or **Link PayPal** with a PayPal sandbox personal account.
-3. Click **New permit**, pick the **Groceries and home** template, click **Turn into rules**, check the chips, then click **Issue permit to Scout**.
+3. Click **New permit**, pick the **Groceries and home** template, click **Turn into rules**, check the rules summary, then click **Issue permit to Scout**.
 4. Open **Agent console** and run the prompts in order. "Restock the fridge: milk, eggs and a produce box" is paid at once (under $75). "Get a 2-person tent for Saturday's camping trip" is over $75, so it waits for your one-tap approval. "Buy a 65 inch TV for movie night" is outside the permit, so it asks you. Then switch **Compromised agent** on and run "Find the cheapest 2-person tent anywhere" to watch Valet block a prompt injection.
 5. Open **Red team** and click **Run all six**: six attacks, six stopped.
 6. Open **Activity**, open a paid row, then try **Refund**, **Evidence** and **Verify receipt**.
@@ -42,7 +41,7 @@ PayPal's CEO put it plainly on the Q3 2026 earnings call: agentic commerce "is r
 ## What it does
 
 1. **Link PayPal once.** The PayPal JS SDK v6 save flow vaults the owner's wallet (Vault v3 setup token, then payment token). Agents never see it.
-2. **Write the rules in a sentence.** "Weekly house shopping up to $250 a week, ask me over $75, never gift cards." Claude compiles it into enforceable rules, shown as chips the owner checks before issuing.
+2. **Write the rules in a sentence.** "Weekly house shopping up to $250 a week, ask me over $75, never gift cards." Claude compiles it into enforceable rules, shown as a summary the owner checks before issuing.
 3. **Give each agent its own key.** Scoped, expiring, stored only as a hash. Revoke one without touching the others.
 4. **Every payment is decided in three steps.** A gate (permit active, owner not frozen, PayPal linked), a deterministic policy engine, then an AI guardian that checks intent: does the cart serve the owner's task, and is anything manipulating the agent? **AI can tighten, never loosen.**
 5. **Approve, ask or block.** Inside the rules, PayPal charges the vaulted wallet (Orders v2 with `vault_id`). Near the edge, the owner approves with one tap, on desktop or phone. Manipulated or off task, Valet blocks it and explains why.
@@ -209,8 +208,7 @@ src/app           Next.js pages and API routes
 src/lib           decision engine, PayPal client, Claude helpers, MCP, red team
 src/components    UI kit, AG Grid ledgers, approval cards
 tests             unit tests
-scripts           smoke test, demo recorder, ad renderer, soundtrack synth
-demo              ad composition and the YouTube script
+scripts           end-to-end smoke test
 ```
 
 ## Built with
@@ -221,4 +219,4 @@ PayPal (Vault v3, Orders v2, Payments, Webhooks, JS SDK v6, Agent Toolkit), Clau
 
 Valet's code is MIT. See [LICENSE](LICENSE).
 
-Dependencies keep their own licenses: MIT, ISC, Apache-2.0 and OFL-1.1 (the Inter font), except AG Grid Enterprise, which is commercial. It runs in trial mode without a key; set `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` with a key from AG Grid, a hackathon sponsor. The demo video's soundtrack was synthesized from scratch, and every screenshot is of Valet itself.
+Dependencies keep their own licenses: MIT, ISC, Apache-2.0 and OFL-1.1 (the Inter font), except AG Grid Enterprise, which is commercial. It runs in trial mode without a key; set `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` with a key from AG Grid, a hackathon sponsor. Every screenshot is of Valet itself.
