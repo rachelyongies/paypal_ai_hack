@@ -94,11 +94,11 @@ function baseRequest(permit: Permit, input: PayInput, amount: number): PaymentRe
   };
 }
 
-/** Resolve catalog items by sku when the agent supplied product ids. */
+/** For catalog products, the catalog's name and category win over what the agent claimed. */
 export function hydrateItems(items: RequestItem[]): RequestItem[] {
   return items.map((i) => {
     const p = i.sku ? productById(i.sku) : undefined;
-    return p ? { ...i, name: i.name || p.name, category: i.category ?? p.category } : i;
+    return p ? { ...i, name: p.name, category: p.category } : i;
   });
 }
 
