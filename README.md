@@ -214,7 +214,7 @@ scripts           end-to-end smoke test
 
 ## Built with
 
-PayPal (Vault v3, Orders v2, Payments, Webhooks, JS SDK v6, Agent Toolkit), Claude Opus 5.5 (Anthropic API), AG Grid Enterprise with the AI Toolkit, Model Context Protocol, Next.js, React, Tailwind CSS, jose, Render. Developed with Claude Code as an AI pair programmer.
+PayPal (Vault v3, Orders v2, Payments, Webhooks, JS SDK v6, Agent Toolkit), Claude Opus 5.5 (Anthropic API), AG Grid Enterprise with the AI Toolkit, Model Context Protocol, Next.js, React, Tailwind CSS, jose, Render.
 
 ## License
 
