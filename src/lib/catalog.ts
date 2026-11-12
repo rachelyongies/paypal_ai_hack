@@ -90,7 +90,7 @@ export function searchProducts(query: string, maxPrice?: number) {
   const words = query
     .toLowerCase()
     .split(/[^a-z0-9]+/)
-    .filter((w) => w.length > 2 && !['the', 'and', 'for', 'with', 'buy', 'get', 'some', 'cheap', 'cheapest', 'best'].includes(w));
+    .filter((w) => w.length > 1 && !['in', 'of', 'to', 'an', 'at', 'on', 'my', 'me', 'the', 'and', 'for', 'with', 'buy', 'get', 'some', 'cheap', 'cheapest', 'best'].includes(w));
   const scored = PRODUCTS.map((p) => {
     const hay = `${p.name} ${p.blurb} ${p.category} ${store(p.store)?.name}`.toLowerCase();
     const score = words.reduce((s, w) => s + (hay.includes(w) ? 2 : hay.includes(w.replace(/s$/, '')) ? 1 : 0), 0);
