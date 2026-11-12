@@ -16,16 +16,28 @@ function empty(): DbShape {
   return { owners: {}, permits: {}, requests: {}, webhooks: [], meta: { version: 1, createdAt: new Date().toISOString() } };
 }
 
-export function db(): DbShape {
-  if (!g.__valetDb) {
-    try {
-      const raw = fs.readFileSync(filePath(), 'utf8');
-      const parsed = JSON.parse(raw) as DbShape;
-      g.__valetDb = { ...empty(), ...parsed };
-    } catch {
-      g.__valetDb = empty();
-    }
+/** Read the data file. A missing file starts an empty store; an unreadable one is set aside, never overwritten. */
+function load(): DbShape {
+  const file = filePath();
+  let raw: string;
+  try {
+    raw = fs.readFileSync(file, 'utf8');
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return empty();
+    throw err;
   }
+  try {
+    return { ...empty(), ...(JSON.parse(raw) as DbShape) };
+  } catch (err) {
+    const aside = `${file}.unreadable-${Date.now()}`;
+    fs.renameSync(file, aside);
+    console.error(`The data file was not valid JSON. Moved it to ${aside} and started empty.`, err);
+    return empty();
+  }
+}
+
+export function db(): DbShape {
+  if (!g.__valetDb) g.__valetDb = load();
   return g.__valetDb;
 }
 
